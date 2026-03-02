@@ -17,20 +17,24 @@ end
 local item = instanceItem("Base.Belt2")
 
 
--- zombie/inventory/types/Clothing.java
---   42.13.2  public float getDirtyness()
---   42.14    public float getDirtiness()
-local function patch_clothing_dirtiness(obj)
-    if not obj then return end
+-- Add alias for method: if obj has nameA, add nameB that calls nameA (and vice versa).
+-- Only one of (name_a, name_b) should exist on obj; the other is patched in.
+local function patch_method_alias(obj, name_a, name_b)
+    if not obj or not name_a or not name_b then return end
     local patch = {}
-    if obj.getDirtiness then
-        patch.getDirtyness = function(self) return self:getDirtiness() end
-    elseif obj.getDirtyness then
-        patch.getDirtiness = function(self) return self:getDirtyness() end
+    if obj[name_a] then
+        patch[name_b] = obj[name_a]
+    elseif obj[name_b] then
+        patch[name_a] = obj[name_b]
     end
     if not table.isempty(patch) then patch_metatable(obj, patch) end
 end
-patch_clothing_dirtiness(item)
+
+-- zombie/inventory/types/Clothing.java
+--   42.13.2  public float getDirtyness() / setDirtyness(float)
+--   42.14    public float getDirtiness() / setDirtiness(float)
+patch_method_alias(item, "getDirtiness", "getDirtyness")
+patch_method_alias(item, "setDirtiness", "setDirtyness")
 
 
 -- zombie/scripting/objects/Item.java

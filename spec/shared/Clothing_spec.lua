@@ -24,10 +24,32 @@ describe("Clothing", function()
             assert.is_function(item.getDirtyness)
         end)
 
-        it("getDirtiness and getDirtyness should return the same value", function()
+        it("should refer to the same method", function()
+            local m1 = item.getDirtiness
+            local m2 = item.getDirtyness
+            assert.eq(m1, m2)
+        end)
+
+        it("should return the same value", function()
             local dirtiness = item:getDirtiness()
             local dirtyness = item:getDirtyness()
             assert.eq(dirtiness, dirtyness)
+        end)
+    end)
+
+    describe("setDirt[iy]ness()", function()
+        it("should have setDirtiness method", function()
+            assert.is_function(item.setDirtiness)
+        end)
+
+        it("should have setDirtyness method", function()
+            assert.is_function(item.setDirtyness)
+        end)
+
+        it("should refer to the same method", function()
+            local m1 = item.setDirtiness
+            local m2 = item.setDirtyness
+            assert.eq(m1, m2)
         end)
     end)
 

@@ -9,8 +9,10 @@ Patches renamed or changed game API so [b]old mods keep working on newer game bu
 
 Load this mod [b]before[/b] or with mods that target older game versions to reduce breakage after updates. No config required.
 
+[b]Want another mod fixed?[/b] Open [b]one thread per mod[/b] in the Discussion tab (include the mod name and what breaks), so requests can be tracked and prioritized.
+
 [h1]Known fixed mods[/h1]
-• [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3555588616]Sewing Workbranch[/url]
+• [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3555588616]Sewing Workbranch[/url] fixed for 42.13 and 42.14
 
 [b]☕ Support the Developer:[/b]
 [url=https://ko-fi.com/zed_0xff][img]https://i.imgur.com/Utx6OIH.png[/img][/url]

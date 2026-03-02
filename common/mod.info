@@ -6,7 +6,7 @@ author=zed_0xff
 url=https://github.com/zed-0xff
 
 icon=icon_64.png
-poster=poster.png
+poster=icon_256.png
 
 description=Patches renamed or changed game API so old mods keep working on newer game builds.
 

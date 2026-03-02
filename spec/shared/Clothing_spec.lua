@@ -32,8 +32,18 @@ describe("Clothing", function()
     end)
 
     describe("getTags():get(0)", function()
-        it("should return a string", function()
-            assert.is_string(item:getTags():get(0))
+        local tags = item:getTags()
+
+        describe("get(0)", function()
+            it("should return a string", function()
+                assert.is_string(tags:get(0))
+            end)
+        end)
+
+        describe("size()", function()
+            it("should return positive number", function()
+                assert.gt(tags:size(), 0)
+            end)
         end)
     end)
 

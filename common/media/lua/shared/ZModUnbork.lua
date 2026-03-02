@@ -16,9 +16,8 @@ end
 
 local item = instanceItem("Base.Belt2")
 
+
 -- zombie/inventory/types/Clothing.java
---   42.12    public float getDirtyness()
---   42.13.1  public float getDirtiness()
 --   42.13.2  public float getDirtyness()
 --   42.14    public float getDirtiness()
 local function patch_clothing_dirtiness(obj)
@@ -29,19 +28,24 @@ local function patch_clothing_dirtiness(obj)
     elseif obj.getDirtyness then
         patch.getDirtiness = function(self) return self:getDirtyness() end
     end
-    if next(patch) then patch_metatable(obj, patch) end
+    if not table.isempty(patch) then patch_metatable(obj, patch) end
 end
 patch_clothing_dirtiness(item)
+
 
 -- zombie/scripting/objects/Item.java
 --   42.12    public ArrayList<String> getTags()
 --   42.13.1  public Set<ItemTag>      getTags()
 patch_metatable(item:getTags(), {
     get = function(self, index)
-        return self:toArray()[index+1]
+        return self:toArray()[index+1]:toString()
     end
 })
 
+
+-- zombie/scripting/objects/Item.java
+--   42.12    public String   getTypeString()
+--   42.13.1  public ItemType getItemType()        XXX NOT EQUAL TO getStringItemType() !
 if ItemType then
     local ITEM_TYPE_TO_STRING = {
         [ItemType.ALARM_CLOCK]          = "AlarmClock",
@@ -62,9 +66,6 @@ if ItemType then
         [ItemType.WEAPON_PART]          = "WeaponPart",
     }
 
-    -- zombie/scripting/objects/Item.java
-    --   42.12    public String   getTypeString()
-    --   42.13.1  public ItemType getItemType()        XXX NOT EQUAL TO getStringItemType() !
     patch_metatable(item:getScriptItem(), {
         getTypeString = function(self)
             if not self.getItemType then return nil end

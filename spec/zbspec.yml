@@ -1,0 +1,21 @@
+# see https://github.com/zed-0xff/zbspec
+
+# default is true, some cheat features like instant timed actions are not available when false
+debug: true
+unpause: false
+auto_shutdown: false
+
+# lua file names from ZBSpec/lua/, loaded before spec/spec_helper.lua
+helpers:
+  - common_helpers
+#  - log_events
+#  - log_packets
+
+mods:
+  - { id: "ZModUnbork", path: "." }
+
+game_versions:
+  - 42.12
+  - 42.13.1
+  - 42.13.2
+  - unstable

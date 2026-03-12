@@ -2,7 +2,7 @@ name=Zed's Universal Mod Unbork
 id=ZModUnbork
 versionMin=42.12
 
-author=zed_0xff
+author=Zed
 url=https://github.com/zed-0xff
 
 icon=icon_64.png
@@ -10,3 +10,4 @@ poster=icon_256.png
 
 description=Patches renamed or changed game API so old mods keep working on newer game builds.
 
+loadModBefore=\SUPPORTGOODSCOMPUTERS,\GRM-OgrimMachineUtils

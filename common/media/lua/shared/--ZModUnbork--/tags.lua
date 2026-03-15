@@ -11,7 +11,8 @@ local tags     = inv_item:getTags()         -- Set<ItemTag>
 -- patches metatable for Set<ItemTag>, so both InventoryItem.getTags and Item.getTags are affected
 ZModUnbork.patch_metatable(tags, {
     get = function(self, index)
-        return self:toArray()[index+1]:toString()
+        local tag = self:toArray()[index+1] -- can be NULL if tag is not registered: [base:firearm, null, base:hasmetal]
+        return tag and tag:toString() or ""
     end
 })
 

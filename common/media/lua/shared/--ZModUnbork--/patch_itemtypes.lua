@@ -1,11 +1,18 @@
+local TYPE_MAP = {
+    ["type=container"] = ItemType.CONTAINER,
+    ["type=drainable"] = ItemType.DRAINABLE,
+}
+
 local function checkItem(item)
     if item:getItemType() ~= ItemType.NORMAL then return end
     local lines= item:getScriptLines()
     for i=0,lines:size()-1 do
-        local line = lines:get(i):gsub("[\t ,]", "")
-        if line == "Type=Drainable" then
-            print("[ZModUnbork] setting itemType to ItemType.DRAINABLE for " .. item:getFullName())
-            item:setItemType(ItemType.DRAINABLE)
+        local line = lines:get(i):gsub("[\t ,]", ""):lower()
+        local newType = TYPE_MAP[line]
+        if newType then
+            print("[ZModUnbork] " .. item:getFullName() .. ":setting itemType to " .. tostring(newType))
+            item:setItemType(newType)
+            break
         end
     end
 end

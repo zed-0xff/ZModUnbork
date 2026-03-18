@@ -11,8 +11,7 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
 
 [b]Want another mod fixed?[/b] Open [b]one thread per mod[/b] in the Discussion tab (include the mod name and what breaks), so requests can be tracked and prioritized.
 
-[h1]Known fixed mods[/h1]
-• [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3555588616]Sewing Workbranch[/url] works in 42.13 and 42.14
+[h1]Revived mods[/h1]
 • [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400782481]Item Comparison[/url] works in 42.14
 • [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3508513470]Support Goods - MyComputer! [/url] works in 42.13+
 

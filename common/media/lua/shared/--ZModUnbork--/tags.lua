@@ -71,16 +71,13 @@ local function patchedHasTag(orig, self, ...)
         local cachedTags = _cached_tags[fullType]
         local firstTime = not cachedTags
         if firstTime then
-            print("[ZModUnbork] Item:hasTag(string) is no longer supported in 42.13+ - use Item:getTags():get(index) instead")
-            print("[ZModUnbork] called with argument: " .. tagName)
-
             cachedTags = parse_tags(self)
             _cached_tags[fullType] = cachedTags
         end
 
         local result = cachedTags[tagName:lower()] or false
         if firstTime then
-            print("[ZModUnbork] returning " .. tostring(result))
+            print(string.format("[ZModUnbork] %s:hasTag('%s') => %s", tostring(fullType), tagName, tostring(result)))
         end
         return result
     end

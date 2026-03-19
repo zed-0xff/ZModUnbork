@@ -7,7 +7,7 @@ local function checkItem(item)
     if not item.getItemType or not item.setItemType then return end
 
     local curType = item:getItemType()
-    if curType ~= ItemType.NORMAL then return end -- already fixed
+    if curType and curType ~= ItemType.NORMAL then return end -- already fixed
 
     local scriptTbl = ZModUnbork.parse_item_script(item)
     if not scriptTbl or not scriptTbl.type then return end

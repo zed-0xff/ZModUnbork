@@ -1,11 +1,12 @@
+-- mods unborked:
+--   - Support Goods - MyComputers
+--   - Anthro Survivors (the "Furry Mod")
 if not CharacterStat or not CharacterStat.UNHAPPINESS or not CharacterStat.BOREDOM then return end
 
 -- zombie/characters/BodyDamage/BodyDamage.java
---   42.12    public float getUnhappynessLevel() / public void setUnhappynessLevel(float f)
---   42.12    public float getBoredomLevel()     / public void setBoredomLevel(float f)
---   42.13.1  -
---
--- used by 3508513470/mods/Support Goods - MyComputers
+--   42.12  public float getUnhappynessLevel() / public void setUnhappynessLevel(float f)
+--   42.12  public float getBoredomLevel()     / public void setBoredomLevel(float f)
+--   42.13  -
 local function patchBodyDamage(playerIdx, playerObj)
     Events.OnCreatePlayer.Remove(patchBodyDamage)
 
@@ -29,6 +30,19 @@ local function patchBodyDamage(playerIdx, playerObj)
             end,
             setBoredomLevel = function(self, f)
                 return self:getParentChar():getStats():set(CharacterStat.BOREDOM, f)
+            end,
+        })
+    end
+
+    -- 42.12: getPlayer():getBodyDamage():getWetness()
+    -- 42.13: getPlayer():getStats():get(CharacterStat.WETNESS)
+    if not bodyDamage.getWetness and not bodyDamage.setWetness then
+        ZModUnbork.patch_metatable(bodyDamage, {
+            getWetness = function(self)
+                return self:getParentChar():getStats():get(CharacterStat.WETNESS)
+            end,
+            setWetness = function(self, f)
+                return self:getParentChar():getStats():set(CharacterStat.WETNESS, f)
             end,
         })
     end

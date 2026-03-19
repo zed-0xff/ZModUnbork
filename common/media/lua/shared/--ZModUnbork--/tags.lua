@@ -27,30 +27,14 @@ ZModUnbork.patch_metatable(tags, {
 
 local _cached_tags = {}
 
-local function parse_tags(obj)
+local function parse_tags(item)
+    local scriptTbl = ZModUnbork.parse_item_script(item)
     local tags = {}
 
-    local scriptLines
-    if obj.getScriptLines then
-        scriptLines = obj:getScriptLines()
-    end
-
-    if not scriptLines and obj.getScriptItem then
-        local scriptItem = obj:getScriptItem()
-        if scriptItem and scriptItem.getScriptLines then
-            scriptLines = scriptItem:getScriptLines()
-        end
-    end
-
-    if scriptLines then
-        for i=0,scriptLines:size()-1 do
-            local line = scriptLines:get(i):trim():gsub(" ", ""):lower()
-            if line:startsWith("tags=") then
-                local tagList = line:sub(6):split("[,;]")
-                for _, tag in ipairs(tagList) do
-                    tags[tag] = true
-                end
-            end
+    if scriptTbl and scriptTbl.tags then
+        local tagList = scriptTbl.tags:split("[,;]")
+        for _, tag in ipairs(tagList) do
+            tags[tag] = true
         end
     end
 

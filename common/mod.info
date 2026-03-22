@@ -10,4 +10,4 @@ poster=icon_256.png
 
 description=Patches renamed or changed game API so old mods keep working on newer game builds.
 
-loadModBefore=\SUPPORTGOODSCOMPUTERS,\GRM-OgrimMachineUtils,\FurryMod
+loadModBefore=\FurryApocalypse,\FurryMod,\GRM-OgrimMachineUtils,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS

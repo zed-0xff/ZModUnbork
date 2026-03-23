@@ -13,7 +13,7 @@ local function patchBodyDamage(playerIdx, playerObj)
     local bodyDamage = playerObj:getBodyDamage()
 
     if not bodyDamage.getUnhappynessLevel and not bodyDamage.setUnhappynessLevel then
-        ZModUnbork.patch_metatable(bodyDamage, {
+        zdk.patch_metatable(bodyDamage, {
             getUnhappynessLevel = function(self)
                 return self:getParentChar():getStats():get(CharacterStat.UNHAPPINESS)
             end,
@@ -24,7 +24,7 @@ local function patchBodyDamage(playerIdx, playerObj)
     end
 
     if not bodyDamage.getBoredomLevel and not bodyDamage.setBoredomLevel then
-        ZModUnbork.patch_metatable(bodyDamage, {
+        zdk.patch_metatable(bodyDamage, {
             getBoredomLevel = function(self)
                 return self:getParentChar():getStats():get(CharacterStat.BOREDOM)
             end,
@@ -37,7 +37,7 @@ local function patchBodyDamage(playerIdx, playerObj)
     -- 42.12: getPlayer():getBodyDamage():getWetness()
     -- 42.13: getPlayer():getStats():get(CharacterStat.WETNESS)
     if not bodyDamage.getWetness and not bodyDamage.setWetness then
-        ZModUnbork.patch_metatable(bodyDamage, {
+        zdk.patch_metatable(bodyDamage, {
             getWetness = function(self)
                 return self:getParentChar():getStats():get(CharacterStat.WETNESS)
             end,

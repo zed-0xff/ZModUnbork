@@ -9,7 +9,7 @@ local function checkItem(item)
     local curType = item:getItemType()
     if curType and curType ~= ItemType.NORMAL then return end -- already fixed
 
-    local scriptTbl = ZModUnbork.parse_item_script(item)
+    local scriptTbl = zdk.parse_item_script(item)
     if not scriptTbl or not scriptTbl.type then return end
 
     local type_upcase = scriptTbl.type:upper()

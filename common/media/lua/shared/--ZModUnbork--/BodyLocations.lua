@@ -29,7 +29,7 @@ local function convert_id(id, fmt, ...)
 end
 
 local group = BodyLocations.getGroup("Human") -- despite the name here it will patch all body locations, not just human ones
-zbHook({
+zdk.hook({
     -- zombie/characters/WornItems/BodyLocationGroup.java
     [group] = {
         --   41.78
@@ -78,7 +78,7 @@ local function checkItem(item)
     if not item.getBodyLocation or not item.setBodyLocation then return end
     if item:getBodyLocation() then return end -- already fixed
 
-    local scriptTbl = ZModUnbork.parse_item_script(item)
+    local scriptTbl = zdk.parse_item_script(item)
     if not scriptTbl or not scriptTbl.bodylocation then return end
 
     local newLoc = _locations_registry[scriptTbl.bodylocation] -- expect value be in lowercase already

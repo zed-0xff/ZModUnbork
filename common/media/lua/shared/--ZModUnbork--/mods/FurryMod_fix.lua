@@ -7,7 +7,7 @@ local _lastLocs   = nil
 local _lastRemove = nil
 
 local group = BodyLocations.getGroup("Human") -- despite the name here it will patch all body locations, not just human ones
-zbHook({
+zdk.hook({
     -- 42.13+ returns Collections.unmodifiableList, and FurryMod tries to call add() and remove() on it
     -- List<BodyLocation>
     [group:getAllLocations()] = {

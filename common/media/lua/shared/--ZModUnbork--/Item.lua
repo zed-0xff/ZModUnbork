@@ -24,7 +24,7 @@ local ITEM_TYPE_TO_STRING = {
 -- zombie/scripting/objects/Item.java
 --   42.12    public String   getTypeString()
 --   42.13.1  public ItemType getItemType()        XXX NOT EQUAL TO getStringItemType() !
-ZModUnbork.patch_metatable(item:getScriptItem(), {
+zdk.patch_metatable(item:getScriptItem(), {
     getTypeString = function(self)
         if not self.getItemType then return nil end
         local itemType = self:getItemType()

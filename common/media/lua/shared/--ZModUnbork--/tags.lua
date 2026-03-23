@@ -9,7 +9,7 @@ local tags     = inv_item:getTags()         -- Set<ItemTag>
 -- 42.13.1  public Set<ItemTag>      getTags() - does not have get(index) method
 --
 -- patches metatable for Set<ItemTag>, so both InventoryItem.getTags and Item.getTags are affected
-ZModUnbork.patch_metatable(tags, {
+zdk.patch_metatable(tags, {
     get = function(self, index)
         local tag = self:toArray()[index+1] -- can be NULL if tag is not registered: [base:firearm, null, base:hasmetal]
         return tag and tag:toString() or ""
@@ -28,7 +28,7 @@ ZModUnbork.patch_metatable(tags, {
 local _cached_tags = {}
 
 local function parse_tags(item)
-    local scriptTbl = ZModUnbork.parse_item_script(item)
+    local scriptTbl = zdk.parse_item_script(item)
     local tags = {}
 
     if scriptTbl and scriptTbl.tags then
@@ -74,7 +74,7 @@ for klassObj, mt in pairs(__classmetatables) do
     -- XXX have to use rawget() here to avoid calling any metamethods that regular tbl['hasTag'] or tbl.hasTag might potentially trigger
     -- random mods break in random places if "tbl['hasTag']" or "tbl.hasTag" is used here
     if type(index) == "table" and rawget(index, 'hasTag') then
-        zbHook({
+        zdk.hook({
             [index] = {
                 hasTag = patchedHasTag,
             },

@@ -1,6 +1,8 @@
 -- mods unborked:
---   - Support Goods - MyComputers
---   - Anthro Survivors (the "Furry Mod")
+--   Support Goods - MyComputers
+--   Anthro Survivors (the "Furry Mod")
+--   Furry Apocalypse (Anthro Zombies)
+
 if not CharacterStat or not CharacterStat.UNHAPPINESS or not CharacterStat.BOREDOM then return end
 
 -- zombie/characters/BodyDamage/BodyDamage.java
@@ -43,6 +45,19 @@ local function patchBodyDamage(playerIdx, playerObj)
             end,
             setWetness = function(self, f)
                 return self:getParentChar():getStats():set(CharacterStat.WETNESS, f)
+            end,
+        })
+    end
+
+    -- 42.12: getPlayer():getBodyDamage():getFoodSicknessLevel()
+    -- 42.13: getPlayer():getStats():get(CharacterStat.FOOD_SICKNESS)
+    if not bodyDamage.getFoodSicknessLevel and not bodyDamage.setFoodSicknessLevel then
+        zdk.patch_metatable(bodyDamage, {
+            getFoodSicknessLevel = function(self)
+                return self:getParentChar():getStats():get(CharacterStat.FOOD_SICKNESS)
+            end,
+            setFoodSicknessLevel = function(self, f)
+                return self:getParentChar():getStats():set(CharacterStat.FOOD_SICKNESS, f)
             end,
         })
     end

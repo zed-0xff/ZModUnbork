@@ -6,20 +6,24 @@ Patches renamed or changed game API so [b]old mods keep working on newer game bu
 - [b]Clothing[/b] — getDirtiness/getDirtyness and setDirtiness/setDirtyness (whichever spelling the game uses, the other is aliased).
 - [b]Item script (getTypeString)[/b] — ScriptItem no longer has getTypeString() in 42.13+; we restore it by mapping getItemType() back to the old string (e.g. "Drainable", "Literature").
 - [b]Item getTags()[/b] — Old mods expect tags as a list with .get(index); when the game exposes a Set, we add .get() so tag access by index still works.
+- other stuff
 
 Load this mod [b]before[/b] or with mods that target older game versions to reduce breakage after updates. No config required.
 
 [b]Want another mod fixed?[/b] Open [b]one thread per mod[/b] in the Discussion tab (include the mod name and what breaks), so requests can be tracked and prioritized.
 
-[h1]Revived mods[/h1]
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2893930681]Anthro Survivors (the "Furry Mod")[/url] works in 42.14+
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3238978135]Furry Apocalypse (Anthro Zombies)[/url] works in 42.14+
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400782481]Item Comparison[/url] works in 42.14
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3459638181]Small Town First Responders[/url] works in 42.13+
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3508513470]Support Goods - MyComputer! [/url] works in 42.13+
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3512993822]Support Goods Mega Mod[/url] works in 42.13+
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3479281883]Support Goods Bandits Integration[/url] works in 42.13+
-- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3535295548]UNOFFICIAL Fools New Containers for B42[/url] works in 42.13+
+[h1]Revived mods (work on 42.13+)[/h1]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2893930681]Anthro Survivors (the "Furry Mod")[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3238978135]Furry Apocalypse (Anthro Zombies)[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400782481]Item Comparison[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3459638181]Small Town First Responders[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3508513470]Support Goods - MyComputer! [/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3512993822]Support Goods Mega Mod[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3479281883]Support Goods Bandits Integration[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3535295548]UNOFFICIAL Fools New Containers for B42[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3426711866]Fallout Food Mod B42[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3069465403]Chocolate Pack[/url]
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3540568094]The Lord of the Rings Posters[/url]
 
 [b]☕ Support the Developer:[/b]
 [url=https://ko-fi.com/zed_0xff][img]https://i.imgur.com/Utx6OIH.png[/img][/url]

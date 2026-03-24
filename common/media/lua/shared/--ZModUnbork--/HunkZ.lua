@@ -16,7 +16,7 @@ local function copyHottieZToHunkZ()
     if not scriptBodies or scriptBodies:size() ~= 2 or scriptBodies:get(0) ~= "pz-vanilla" then return end
 
     local itemBody = scriptBodies:get(1)
-    if type(itemBody) ~= "string" or not itemBody:startsWith("item HottieZ") then return end
+    if type(itemBody) ~= "string" or not luautils.stringStarts(itemBody, "item HottieZ") then return end
     -- itemBody now contains smth like:
     --
     -- "item HottieZ

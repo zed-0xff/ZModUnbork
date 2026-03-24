@@ -4,13 +4,14 @@
 
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.13")) then return end
 
+local logger = zdk.Logger.new("ZModUnbork")
 local _locations_registry = {}
 
 -- convert String id to ItemBodyLocation, register if not exists, and cache in _locations_registry for future use
 local function convert_id(id, fmt, ...)
     local origKey = id
     local lowKey  = origKey:lower()
-    if not _locations_registry[lowKey] then
+    if _locations_registry[lowKey] == nil then -- values are true/false
         local loc = ItemBodyLocation.get(ResourceLocation.of(id)) -- try standard locations first - Furry: bodyGroup:indexOf("Bandage")
         if not loc then
             local fullKey = origKey
@@ -21,7 +22,7 @@ local function convert_id(id, fmt, ...)
         end
         if fmt then
             local src = string.format(fmt, ...)
-            print(string.format("[ZModUnbork] %s -> %s", src, tostring(loc)))
+            logger:info("%s -> %s", src, loc)
         end
         _locations_registry[lowKey] = loc
     end
@@ -83,7 +84,7 @@ local function checkItem(item)
 
     local newLoc = _locations_registry[scriptTbl.bodylocation] -- expect value be in lowercase already
     if newLoc then
-        print(string.format("[ZModUnbork] set bodyLocation to %-35s for %s", tostring(newLoc), item:getFullName()))
+        logger:info("set %-13s to %-35s for %s", "bodyLocation", newLoc, item:getFullName())
         item:setBodyLocation(newLoc)
     end
 end

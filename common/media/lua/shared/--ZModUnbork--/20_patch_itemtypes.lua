@@ -1,5 +1,7 @@
+local logger = zdk.Logger.new("ZModUnbork")
+
 if not ItemType or not ItemType.NORMAL then
-    print("[ZModUnbork] ItemType not found, skipping patch_itemtypes")
+    logger:warn("ItemType not found, skipping patch_itemtypes")
     return
 end
 
@@ -16,11 +18,11 @@ local function checkItem(item)
     local newType = ItemType[type_upcase]
     if newType then
         if newType ~= curType then
-            print(string.format("[ZModUnbork] setting itemType to %-20s for %s", tostring(newType), item:getFullName()))
+            logger:info("set %-13s to %-35s for %s", "itemType", newType, item:getFullName())
             item:setItemType(newType)
         end
     else
-        print(string.format("[ZModUnbork] unknown itemType %-20s for %s", tostring(scriptTbl.type), item:getFullName()))
+        logger:warn("unknown itemType %-20s for %s", scriptTbl.type, item:getFullName())
     end
 end
 

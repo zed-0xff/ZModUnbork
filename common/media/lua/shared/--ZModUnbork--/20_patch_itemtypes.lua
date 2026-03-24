@@ -1,3 +1,10 @@
+-- mods unborked:
+--   Furry.2893930681
+--   FurryApocalypseAnthroAccessories.3238978135
+--   newcontainers_B42.3535295548
+--   Support Corps.3512993822
+--   Support Goods - MyComputers.3508513470
+
 local logger = zdk.Logger.new("ZModUnbork")
 
 if not ItemType or not ItemType.NORMAL then

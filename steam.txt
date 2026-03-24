@@ -19,6 +19,7 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
 - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3508513470]Support Goods - MyComputer! [/url] works in 42.13+
 - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3512993822]Support Goods Mega Mod[/url] works in 42.13+
 - [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3479281883]Support Goods Bandits Integration[/url] works in 42.13+
+- [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3535295548]UNOFFICIAL Fools New Containers for B42[/url] works in 42.13+
 
 [b]☕ Support the Developer:[/b]
 [url=https://ko-fi.com/zed_0xff][img]https://i.imgur.com/Utx6OIH.png[/img][/url]

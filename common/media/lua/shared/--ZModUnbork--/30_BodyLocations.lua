@@ -8,6 +8,9 @@ if getCore():getGameVersion():isLessThan(GameVersion.parse("42.13")) then return
 local logger = zdk.Logger.new("ZModUnbork")
 local _locations_registry = {}
 
+ZModUnbork = ZModUnbork or {}
+ZModUnbork.locations_registry = _locations_registry
+
 -- convert String id to ItemBodyLocation, register if not exists, and cache in _locations_registry for future use
 local function convert_id(id, fmt, ...)
     local origKey = id
@@ -81,6 +84,16 @@ zdk.hook({
             return orig(group, id, ...)
         end,
     },
+
+    -- zombie/characters/SurvivorDesc.java
+    [SurvivorDesc.class] = {
+        -- 42.12: public void setWornItem(String str, InventoryItem inventoryItem)
+        -- 42.13: public void setWornItem(ItemBodyLocation itemBodyLocation, InventoryItem item)
+        setWornItem = function(orig, self, loc, item, ...)
+            if type(loc) == "string" then loc = convert_id(loc, "SurvivorDesc.setWornItem('%s')", loc) end
+            return orig(self, loc, item, ...)
+        end,
+    },
 })
 
 local function checkItem(item)
@@ -94,10 +107,35 @@ local function checkItem(item)
     if newLoc then
         logger:info("set %-13s to %-35s for %s", "bodyLocation", newLoc, item:getFullName())
         item:setBodyLocation(newLoc)
+    else
+        logger:warn("unknown bodyLocation %-20s for %s", scriptTbl.bodylocation, item:getFullName())
     end
 end
 
-local function patchBodyLocations()
+local function tableKeys(tbl)
+    local keys = {}
+    for k in pairs(tbl) do table.insert(keys, k) end
+    return keys
+end
+
+-- ClothingSelectionDefinitions.default.Female = {
+--   Legging -> "zmodunbork:leggging"
+-- }
+local function patchClothingSelectionDefinitions()
+    if not ClothingSelectionDefinitions or not ClothingSelectionDefinitions.default then return end
+
+    for sex,def in pairs(ClothingSelectionDefinitions.default) do
+        local keys = tableKeys(def)
+        for _, key in ipairs(keys) do
+            if _locations_registry[key:lower()] then
+                def[_locations_registry[key:lower()]:toString()] = def[key]
+                def[key] = nil
+            end
+        end
+    end
+end
+
+local function patchItems()
     local items = ScriptManager.instance:getAllItems()
     for i=0,items:size()-1 do
         local item = items:get(i)
@@ -107,4 +145,16 @@ local function patchBodyLocations()
     end
 end
 
-Events.OnInitWorld.Add(patchBodyLocations)
+local function patchBodyLocationsAfterAll()
+    logger:info("patchBodyLocationsAfterAll()")
+    patchItems()
+end
+
+local function patchBodyLocationsBeforeAll()
+    logger:info("patchBodyLocationsBeforeAll()")
+    Events.OnGameBoot.Add(patchBodyLocationsAfterAll)
+    patchItems()
+    patchClothingSelectionDefinitions()
+end
+
+Events.OnGameBoot.Add(patchBodyLocationsBeforeAll)

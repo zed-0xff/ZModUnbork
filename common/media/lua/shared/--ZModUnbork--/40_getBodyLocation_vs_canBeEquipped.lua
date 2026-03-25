@@ -56,4 +56,4 @@ local function patchBodyLocations()
     end
 end
 
-Events.OnInitWorld.Add(patchBodyLocations)
+Events.OnGameBoot.Add(patchBodyLocations)

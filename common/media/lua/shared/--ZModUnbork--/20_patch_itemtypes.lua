@@ -43,4 +43,4 @@ local function patchItemTypes()
     end
 end
 
-Events.OnInitWorld.Add(patchItemTypes)
+Events.OnGameBoot.Add(patchItemTypes)

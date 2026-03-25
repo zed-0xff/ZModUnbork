@@ -1,6 +1,7 @@
 -- unborked mods:
---   Furry              - Anthro Survivors (the "Furry Mod")
---   FortniteFurryGirls - Furry Apocalypse Anthro Survivors - Fortnite Furry Girls (b42 conversion)
+--   Furry
+--   FortniteFurryGirls
+--   newcontainers_B42.3535295548
 
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.13")) then return end
 
@@ -29,10 +30,9 @@ local function convert_id(id, fmt, ...)
     return _locations_registry[lowKey]
 end
 
-local group = BodyLocations.getGroup("Human") -- despite the name here it will patch all body locations, not just human ones
 zdk.hook({
     -- zombie/characters/WornItems/BodyLocationGroup.java
-    [group] = {
+    [BodyLocationGroup.class] = {
         --   41.78
         --     public BodyLocation getOrCreateLocation(String id)
         --
@@ -59,6 +59,14 @@ zdk.hook({
         setHideModel = function(orig, self, id1, id2, ...)
             if type(id1) == "string" then id1 = convert_id(id1, "BodyLocationGroup.setHideModel") end
             if type(id2) == "string" then id2 = convert_id(id2, "BodyLocationGroup.setHideModel") end
+            return orig(self, id1, id2, ...)
+        end,
+
+        -- 42.12: public void setExclusive(String id1, String id2)
+        -- 42.13: public void setExclusive(ItemBodyLocation id1, ItemBodyLocation id2)
+        setExclusive = function(orig, self, id1, id2, ...)
+            if type(id1) == "string" then id1 = convert_id(id1, "BodyLocationGroup.setExclusive") end
+            if type(id2) == "string" then id2 = convert_id(id2, "BodyLocationGroup.setExclusive") end
             return orig(self, id1, id2, ...)
         end,
     },

@@ -1,7 +1,12 @@
-if not getActivatedMods or not getActivatedMods():contains("FurryMod") then return end
+-- mods unborked:
+--   Furry.2893930681
+--   SomeTattoo.3318917504
+--   SomeScar.3315365342
 
 -- reflection methods work in debug mode only since 42.15
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.15")) then return end
+
+local logger = zdk.Logger.new("ZModUnbork")
 
 local _lastLocs   = nil
 local _lastRemove = nil
@@ -22,13 +27,13 @@ zdk.hook({
                     elseif instanceof(locationObj, "ItemBodyLocation") then
                         id = locationObj
                     else
-                        print(string.format("[ZModUnbork] BodyLocationGroup.list.add(%d, %s) called with unexpected argument type %s", index, tostring(locationObj), type(locationObj)))
+                        logger:error("BodyLocationGroup.list.add(%d, %s) called with unexpected argument type %s", index, locationObj, type(locationObj))
                         return
                     end
-                    print(string.format("[ZModUnbork] BodyLocationGroup.list.add(%d, %s) => group:moveLocationToIndex(%s, %d)", index, tostring(locationObj), tostring(id), index))
+                    logger:info("BodyLocationGroup.list.add(%d, %s) => group:moveLocationToIndex(%s, %d)", index, locationObj, id, index)
                     ZModUnbork.last_group:moveLocationToIndex(id, index) -- expects ItemBodyLocation, int
                 else
-                    print(string.format("[ZModUnbork] BodyLocationGroup.list.add(%d, %s) called on unmodifiable list, ignored", index, tostring(locationObj)))
+                    logger:info("BodyLocationGroup.list.add(%d, %s) called on unmodifiable list, ignored", index, locationObj)
                 end
             elseif not locationObj then
                 -- add(obj)
@@ -39,27 +44,27 @@ zdk.hook({
                 elseif instanceof(locationObj, "ItemBodyLocation") then
                     id = locationObj
                 else
-                    print(string.format("[ZModUnbork] BodyLocationGroup.list.add(%s) called with unexpected argument type %s", tostring(locationObj), type(locationObj)))
+                    logger:error("BodyLocationGroup.list.add(%s) called with unexpected argument type %s", locationObj, type(locationObj))
                     return
                 end
-                print(string.format("[ZModUnbork] BodyLocationGroup.list.add(%s) => group:getOrCreateLocation(%s)", tostring(locationObj), tostring(id)))
+                logger:info("BodyLocationGroup.list.add(%s) => group:getOrCreateLocation(%s)", locationObj, id)
                 ZModUnbork.last_group:getOrCreateLocation(id) -- expects ItemBodyLocation
             else
                 -- ??
-                print(string.format("[ZModUnbork] BodyLocationGroup.list.add(%s, %s) called with unexpected arguments, ignored", tostring(index), tostring(locationObj)))
+                logger:error("BodyLocationGroup.list.add(%s, %s) called with unexpected arguments, ignored", index, locationObj)
             end
         end,
 
         remove = function(orig, self, locationObj, ...)
             _lastRemove = locationObj
-            print(string.format("[ZModUnbork] BodyLocationGroup.list.remove(%s) called on unmodifiable list, ignored", tostring(locationObj)))
+            logger:info("BodyLocationGroup.list.remove(%s) called on unmodifiable list, ignored", locationObj)
         end,
     },
 
     _G = {
         getClassField = function(orig, group, fieldIdx, ...)
             if instanceof(group, "BodyLocationGroup") and fieldIdx == 1 then
-                print(string.format("[ZModUnbork] getClassField(%s, %s)", tostring(group), tostring(fieldIdx)))
+                logger:info("getClassField(%s, %s)", group, fieldIdx)
                 return "BodyLocationGroup_F1"
             end
             return orig(group, fieldIdx, ...)
@@ -67,7 +72,7 @@ zdk.hook({
 
         getClassFieldVal = function(orig, group, fieldObj, ...)
             if instanceof(group, "BodyLocationGroup") and fieldObj == "BodyLocationGroup_F1" then
-                print(string.format("[ZModUnbork] getClassFieldVal(%s, %s)", tostring(group), tostring(fieldObj)))
+                logger:info("getClassFieldVal(%s, %s)", group, fieldObj)
                 ZModUnbork.last_group = group
                 _lastLocs = group:getAllLocations()
                 return _lastLocs

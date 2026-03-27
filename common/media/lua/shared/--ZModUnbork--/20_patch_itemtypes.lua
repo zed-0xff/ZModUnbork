@@ -21,8 +21,7 @@ local function checkItem(item)
     local scriptTbl = zdk.parse_item_script(item)
     if not scriptTbl or not scriptTbl.type then return end
 
-    local type_upcase = scriptTbl.type:upper()
-    local newType = ItemType[type_upcase]
+    local newType = ItemType.get(ResourceLocation.of(scriptTbl.type))
     if newType then
         if newType ~= curType then
             logger:info("set %-13s to %-35s for %s", "itemType", newType, item:getFullName())

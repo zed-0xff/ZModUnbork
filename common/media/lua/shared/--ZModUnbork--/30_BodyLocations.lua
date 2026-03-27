@@ -5,14 +5,70 @@
 
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.13")) then return end
 
-local logger = zdk.Logger.new("ZModUnbork")
+local MOD_ID = "ZModUnbork"
+local DEFAULT_PREFIX = MOD_ID
+
+local logger = zdk.Logger.new(MOD_ID, zdk.Logger.DEBUG)
 local _locations_registry = {}
 
 ZModUnbork = ZModUnbork or {}
 ZModUnbork.locations_registry = _locations_registry
 
+local function get_call_origin()
+    if not getCurrentCoroutine or not getCoroutineCallframeStack or not getFilenameOfCallframe or not getLineNumber then return end
+
+    local ok, result = pcall(function()
+        local coro = getCurrentCoroutine()
+        if not coro then return end
+
+        for i = 0,20 do
+            local frame = getCoroutineCallframeStack(coro, i)
+            if not frame then break end
+
+            -- both getFilenameOfCallframe() and getLineNumber() could return nil
+            local fname = getFilenameOfCallframe(frame)
+            if fname and not fname:contains(MOD_ID) then
+                local line = getLineNumber(frame)
+                return { fname = fname, line = line }
+            end
+        end
+    end)
+
+    return ok and result or nil
+end
+
+local _logged_origins = {}
+local function log_call_origin(origin)
+    local line = origin.line and (":" .. tostring(origin.line)) or ""
+    local origin_str = tostring(origin.fname) .. line
+    if not _logged_origins[origin_str] then
+        _logged_origins[origin_str] = true
+        logger:info("    called from %s", origin_str)
+    end
+end
+
+local _prefix_cache = {}
+local function origin2prefix(origin)
+    if not origin or not origin.fname then return DEFAULT_PREFIX end
+
+    if _prefix_cache[origin.fname] then
+        return _prefix_cache[origin.fname]
+    end
+
+    local prefix  = DEFAULT_PREFIX
+    local modInfo = zdk.fname2mod(origin.fname)
+    if modInfo then
+        prefix = modInfo:getId():gsub("\\", "") -- remove heading slash from pre-42.15 mod ids
+    end
+
+    _prefix_cache[origin.fname] = prefix
+    return prefix
+end
+
 -- convert String id to ItemBodyLocation, register if not exists, and cache in _locations_registry for future use
 local function convert_id(id, fmt, ...)
+    local callOrigin = get_call_origin()
+
     local origKey = id
     local lowKey  = origKey:lower()
     if _locations_registry[lowKey] == nil then -- values are true/false
@@ -20,7 +76,9 @@ local function convert_id(id, fmt, ...)
         if not loc then
             local fullKey = origKey
             if not fullKey:contains(":") then
-                fullKey = "ZModUnbork:" .. fullKey -- can we get original mod id somehow without java patching?
+                -- local prefix = origin2prefix(callOrigin)
+                local prefix = DEFAULT_PREFIX
+                fullKey = prefix .. ":" .. fullKey
             end
             loc = ItemBodyLocation.get(ResourceLocation.of(fullKey)) or ItemBodyLocation.register(fullKey)
         end
@@ -30,6 +88,9 @@ local function convert_id(id, fmt, ...)
         end
         _locations_registry[lowKey] = loc
     end
+
+    log_call_origin(callOrigin)
+
     return _locations_registry[lowKey]
 end
 

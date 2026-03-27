@@ -2,6 +2,8 @@
 --   Support Corps.3512993822
 
 local function copyHottieZToHunkZ()
+    local logger = zdk.Logger.new("ZModUnbork")
+
     local hottieZ = getItem("Base.HottieZ")
     local hunkZ   = getItem("Base.HunkZ")
 
@@ -40,7 +42,7 @@ local function copyHottieZToHunkZ()
     if not newType or not newType.Load then return end
 
     newType:Load("HunkZ", newBody)
-    print("[ZModUnbork] HunkZ created by copying HottieZ")
+    logger:info("HunkZ created by copying HottieZ")
 end
 
 Events.OnGameBoot.Add(copyHottieZToHunkZ)

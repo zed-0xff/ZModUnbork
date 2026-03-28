@@ -4,8 +4,9 @@
 --   newcontainers_B42.3535295548
 --   Support Corps.3512993822
 --   Support Goods - MyComputers.3508513470
+--   PFO_GUNRUNNER.3434691822
 
-local logger = zdk.Logger.new("ZModUnbork")
+local logger = ZModUnbork.logger
 
 if not ItemType or not ItemType.NORMAL then
     logger:warn("ItemType not found, skipping patch_itemtypes")
@@ -26,6 +27,16 @@ local function checkItem(item)
         if newType ~= curType then
             logger:info("set %-13s to %-35s for %s", "itemType", newType, item:getFullName())
             item:setItemType(newType)
+
+            if newType == ItemType.WEAPON and scriptTbl.ammotype and item.getAmmoType and not item:getAmmoType() then
+                local ammoType = ZModUnbork.RegCache.convert_id(Registries.AMMO_TYPE, scriptTbl.ammotype, scriptTbl.ammotype)
+                if ammoType then
+                    item:setAmmoType(ammoType)
+                    logger:info("set %-13s to %-35s for %s", "ammoType", ammoType, item:getFullName())
+                else
+                    logger:warn("invalid ammoType %-20s for %s", scriptTbl.ammotype, item:getFullName())
+                end
+            end
         end
     else
         logger:warn("unknown itemType %-20s for %s", scriptTbl.type, item:getFullName())

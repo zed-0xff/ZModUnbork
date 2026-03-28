@@ -2,6 +2,8 @@
 --   Furry.2893930681
 --   SomeTattoo.3318917504
 --   SomeScar.3315365342
+--   Spongie Clothing.2684285534
+--   SpongieOpenJackets.2812326159
 
 -- reflection methods work in debug mode only since 42.15
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.15")) then return end
@@ -60,24 +62,67 @@ zdk.hook({
             logger:info("BodyLocationGroup.list.remove(%s) called on unmodifiable list, ignored", locationObj)
         end,
     },
+})
 
+-- getClassField/getClassFieldVal works in debug mode only since 42.15
+if isDebugEnabled() then return end
+
+zdk.hook({
     _G = {
-        getClassField = function(orig, group, fieldIdx, ...)
-            if instanceof(group, "BodyLocationGroup") and fieldIdx == 1 then
-                logger:info("getClassField(%s, %s)", group, fieldIdx)
-                return "BodyLocationGroup_F1"
+        getClassField = function(orig, obj, fieldIdx, ...)
+            local result = nil
+
+            if instanceof(obj, "BodyLocationGroup") then
+                if fieldIdx == 1 then -- private final List<BodyLocation> locations
+                    result = "BodyLocationGroup_locations"
+                end
+            elseif instanceof(obj, "BodyLocation") then
+                if fieldIdx == 2 then -- List<ItemBodyLocation> exclusive
+                    result = "BodyLocation_exclusive"
+                end
+                if fieldIdx == 3 then -- List<ItemBodyLocation> hideModel
+                    result = "BodyLocation_hideModel"
+                end
             end
-            return orig(group, fieldIdx, ...)
+
+            if result then
+                logger:info("getClassField(%s, %s) => %s, called by %s", obj, fieldIdx, result, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
+                return result
+            else
+                logger:error("getClassField(%s, %s) called by %s", obj, fieldIdx, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
+            end
+
+            return orig(obj, fieldIdx, ...)
         end,
 
-        getClassFieldVal = function(orig, group, fieldObj, ...)
-            if instanceof(group, "BodyLocationGroup") and fieldObj == "BodyLocationGroup_F1" then
-                logger:info("getClassFieldVal(%s, %s)", group, fieldObj)
-                ZModUnbork.last_group = group
-                _lastLocs = group:getAllLocations()
-                return _lastLocs
+        getClassFieldVal = function(orig, obj, fieldObj, ...)
+            local result = nil
+
+            if instanceof(obj, "BodyLocationGroup") then
+                if fieldObj == "BodyLocationGroup_locations" then
+                    ZModUnbork.last_group = obj
+                    _lastLocs = obj:getAllLocations()
+                    result = _lastLocs
+                end
+            elseif instanceof(obj, "BodyLocation") then
+                if fieldObj == "BodyLocation_exclusive" then
+                    -- SpongieCopy_BodyLocationsTweaker.lua:24 - there is no way to modify it now, so returning a stub
+                    result = { remove = function() end }
+                end
+                if fieldObj == "BodyLocation_hideModel" then
+                    -- SpongieCopy_BodyLocationsTweaker.lua:36 - there is no way to modify it now, so returning a stub
+                    result = { remove = function() end }
+                end
             end
-            return orig(group, fieldObj, ...)
+
+            if result then
+                logger:info("getClassFieldVal(%s, %s) => %s, called by %s", obj, fieldObj, result, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
+                return result
+            else
+                logger:error("getClassFieldVal(%s, %s) called by %s", obj, fieldObj, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
+            end
+
+            return orig(obj, fieldObj, ...)
         end,
     },
 })

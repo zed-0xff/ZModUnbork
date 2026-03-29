@@ -1,6 +1,6 @@
 if not ItemType then return end
 
-local ITEM_TYPE_TO_STRING = {
+local MAP = {
     [ItemType.ALARM_CLOCK]          = "AlarmClock",
     [ItemType.ALARM_CLOCK_CLOTHING] = "AlarmClockClothing",
     [ItemType.ANIMAL]               = "Animal",
@@ -26,6 +26,6 @@ zdk.augment_metatable(Item.class, {
     getTypeString = function(self)
         if not self.getItemType then return nil end
         local itemType = self:getItemType()
-        return ITEM_TYPE_TO_STRING[itemType]
+        return MAP[itemType]
     end
 })

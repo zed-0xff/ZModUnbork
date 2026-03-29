@@ -45,3 +45,12 @@ zdk.augment_metatable(Item.class, {
         return result
     end
 })
+
+-- zombie/inventory/types/HandWeapon.java
+--   41.78: public ArrayList<String> getCategories()
+--   42.12: -
+zdk.augment_metatable(HandWeapon.class, {
+    getCategories = function(self)
+        return self:getScriptItem():getCategories()
+    end
+})

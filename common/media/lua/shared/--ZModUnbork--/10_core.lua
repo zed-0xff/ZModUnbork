@@ -16,7 +16,16 @@ function ZModUnbork.patch_method_alias(obj, name_a, name_b)
     elseif obj[name_b] then
         patch[name_a] = obj[name_b]
     end
-    if not table.isempty(patch) then zdk.patch_metatable(obj, patch) end
+    if not table.isempty(patch) then zdk.augment_metatable(obj, patch) end
+end
+
+function ZModUnbork.fix_id(id)
+    if type(id) ~= "string" then
+        logger:error("fix_id: expected string, got %s", type(id))
+        return id
+    end
+    if id:contains(":") then return id end
+    return ZModUnbork.DEFAULT_PREFIX .. ":" .. id
 end
 
 --local _prefix_cache = {}
@@ -38,14 +47,44 @@ end
 --end
 
 local _logged_origins = {}
-function ZModUnbork.log_origin_once(origin)
+local function log(level, fmt, ...)
+    local origin = zdk.get_call_origin(ZModUnbork.MOD_ID)
     if not origin then return end
 
-    local line = origin.line and (":" .. tostring(origin.line)) or ""
-    local origin_str = tostring(origin.fname) .. line
-    if not _logged_origins[origin_str] then
-        _logged_origins[origin_str] = true
-        logger:info("    called from %s", origin_str)
+    local origin_str = origin.short_str or (tostring(origin.fname) .. (origin.line and (":" .. tostring(origin.line)) or ""))
+    local log_key = origin_str .. "|" .. tostring(level)
+    if _logged_origins[log_key] then return end
+
+    _logged_origins[log_key] = true
+    logger:log(level, "%s -- " .. tostring(fmt), origin_str, ...)
+end
+
+function ZModUnbork.log_once (fmt, ...) log(logger.INFO, fmt, ...) end
+function ZModUnbork.warn_once(fmt, ...) log(logger.WARN, fmt, ...) end
+
+local function process_all_metatables(condKey, func)
+    for klass, mt in pairs(__classmetatables) do
+        local index = mt.__index
+        -- XXX have to use rawget() here to avoid calling any metamethods that regular tbl['hasTrait'] or tbl.hasTrait might potentially trigger
+        -- random mods break in random places if "tbl['hasTrait']" or "tbl.hasTrait" is used here
+        if type(index) == "table" and rawget(index, condKey) then
+            func(klass)
+        end
     end
 end
 
+-- add new methods if they not already exist
+function ZModUnbork.augment_all_metatables(condKey, tbl)
+    process_all_metatables(condKey, function(klass)
+        zdk.augment_metatable(klass, tbl)
+    end)
+end
+
+-- patch existing methods
+function ZModUnbork.patch_all_metatables(condKey, tbl)
+    process_all_metatables(condKey, function(klass)
+        zdk.hook({
+            [klass] = tbl
+        })
+    end)
+end

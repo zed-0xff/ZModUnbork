@@ -35,10 +35,9 @@ function ZModUnbork.RegCache.convert_id(registry, id, ...)
         return nil
     end
     
-    local callOrigin = zdk.get_call_origin(ZModUnbork.MOD_ID)
-    local cache      = ZModUnbork.RegCache.get(registry)
-    local origKey    = id
-    local lowKey     = origKey:lower()
+    local cache   = ZModUnbork.RegCache.get(registry)
+    local origKey = id
+    local lowKey  = origKey:lower()
 
     if cache[lowKey] == nil then -- values are object or false
         cache[lowKey] = false    -- do not spam log with errors if register fails
@@ -46,21 +45,11 @@ function ZModUnbork.RegCache.convert_id(registry, id, ...)
         -- regClass.get() is equal to registry.get()
         local loc = regClass.get(ResourceLocation.of(id)) -- try standard locations first - Furry: bodyGroup:indexOf("Bandage")
         if not loc then
-            local fullKey = origKey
-            if not fullKey:contains(":") then
-                -- local prefix = origin2prefix(callOrigin)
-                local prefix = ZModUnbork.DEFAULT_PREFIX
-                fullKey = prefix .. ":" .. fullKey
-            end
-            loc = regClass.get(ResourceLocation.of(fullKey)) or regClass.register(fullKey, ...)
-        end
-        if fmt then
-            logger:info("convert_id(%s) -> %s", id, loc)
+            local fullID = ZModUnbork.fix_id(id) -- add default prefix if missing - Furry: "Bandage" -> "ZModUnbork:Bandage"
+            loc = regClass.get(ResourceLocation.of(fullID)) or regClass.register(fullID, ...)
         end
         cache[lowKey] = loc or false
     end
-
-    ZModUnbork.log_origin_once(callOrigin)
 
     return cache[lowKey] or nil
 end

@@ -1,67 +1,33 @@
 -- mods unborked:
---   Support Goods - MyComputers
 --   Anthro Survivors (the "Furry Mod")
 --   Furry Apocalypse (Anthro Zombies)
+--   Rocky_SanityB42.3390307636
+--   Support Goods - MyComputers
 
-if not CharacterStat or not CharacterStat.UNHAPPINESS or not CharacterStat.BOREDOM then return end
+if not BodyDamage or not CharacterStat then return end
 
--- zombie/characters/BodyDamage/BodyDamage.java
---   42.12  public float getUnhappynessLevel() / public void setUnhappynessLevel(float f)
---   42.12  public float getBoredomLevel()     / public void setBoredomLevel(float f)
---   42.13  -
-local function patchBodyDamage(playerIdx, playerObj)
-    Events.OnCreatePlayer.Remove(patchBodyDamage)
+local MAP = {
+    BoredomLevel      = CharacterStat.BOREDOM,
+    DiscomfortLevel   = CharacterStat.DISCOMFORT,
+    FoodSicknessLevel = CharacterStat.FOOD_SICKNESS,
+    InfectionLevel    = CharacterStat.ZOMBIE_INFECTION,
+    PoisonLevel       = CharacterStat.POISON,
+    Temperature       = CharacterStat.TEMPERATURE,
+    UnhappynessLevel  = CharacterStat.UNHAPPINESS,
+    Wetness           = CharacterStat.WETNESS,
+}
 
-    local bodyDamage = playerObj:getBodyDamage()
+-- get/set FakeInfectionLevel - not in 42.13
 
-    if not bodyDamage.getUnhappynessLevel and not bodyDamage.setUnhappynessLevel then
-        zdk.patch_metatable(bodyDamage, {
-            getUnhappynessLevel = function(self)
-                return self:getParentChar():getStats():get(CharacterStat.UNHAPPINESS)
-            end,
-            setUnhappynessLevel = function(self, f)
-                return self:getParentChar():getStats():set(CharacterStat.UNHAPPINESS, f)
-            end
-        })
+local tbl = {}
+for k, v in pairs(MAP) do
+    tbl["get" .. k] = function(self)
+        return self:getParentChar():getStats():get(v)
     end
 
-    if not bodyDamage.getBoredomLevel and not bodyDamage.setBoredomLevel then
-        zdk.patch_metatable(bodyDamage, {
-            getBoredomLevel = function(self)
-                return self:getParentChar():getStats():get(CharacterStat.BOREDOM)
-            end,
-            setBoredomLevel = function(self, f)
-                return self:getParentChar():getStats():set(CharacterStat.BOREDOM, f)
-            end,
-        })
-    end
-
-    -- 42.12: getPlayer():getBodyDamage():getWetness()
-    -- 42.13: getPlayer():getStats():get(CharacterStat.WETNESS)
-    if not bodyDamage.getWetness and not bodyDamage.setWetness then
-        zdk.patch_metatable(bodyDamage, {
-            getWetness = function(self)
-                return self:getParentChar():getStats():get(CharacterStat.WETNESS)
-            end,
-            setWetness = function(self, f)
-                return self:getParentChar():getStats():set(CharacterStat.WETNESS, f)
-            end,
-        })
-    end
-
-    -- 42.12: getPlayer():getBodyDamage():getFoodSicknessLevel()
-    -- 42.13: getPlayer():getStats():get(CharacterStat.FOOD_SICKNESS)
-    if not bodyDamage.getFoodSicknessLevel and not bodyDamage.setFoodSicknessLevel then
-        zdk.patch_metatable(bodyDamage, {
-            getFoodSicknessLevel = function(self)
-                return self:getParentChar():getStats():get(CharacterStat.FOOD_SICKNESS)
-            end,
-            setFoodSicknessLevel = function(self, f)
-                return self:getParentChar():getStats():set(CharacterStat.FOOD_SICKNESS, f)
-            end,
-        })
+    tbl["set" .. k] = function(self, f)
+        return self:getParentChar():getStats():set(v, f)
     end
 end
 
--- need BodyDamage instance which can only be obtained from playerObj:getBodyDamage() after player creation
-Events.OnCreatePlayer.Add(patchBodyDamage)
+zdk.augment_metatable( BodyDamage.class, tbl )

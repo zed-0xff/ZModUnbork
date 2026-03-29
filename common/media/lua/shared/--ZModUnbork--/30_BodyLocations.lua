@@ -1,7 +1,8 @@
 -- unborked mods:
---   Furry
 --   FortniteFurryGirls
+--   Furry
 --   newcontainers_B42.3535295548
+--   SoftAndGentleHoodie.3371049128
 
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.13")) then return end
 
@@ -9,13 +10,8 @@ local logger = ZModUnbork.logger
 local _locations_registry = ZModUnbork.RegCache.get(Registries.ITEM_BODY_LOCATION)
 
 local function convert_id(id, fmt, ...)
-    local result = ZModUnbork.RegCache.convert_id(Registries.ITEM_BODY_LOCATION, id)
-    if fmt then
-        local args = {...}
-        table.insert(args, result)
-        logger:info(fmt .. " => %s", unpack(args))
-    end
-    return result
+    if fmt then ZModUnbork.log_once(fmt, ...) end
+    return ZModUnbork.RegCache.convert_id(Registries.ITEM_BODY_LOCATION, id)
 end
 
 zdk.hook({
@@ -69,16 +65,16 @@ zdk.hook({
             return orig(group, id, ...)
         end,
     },
+})
 
-    -- zombie/characters/SurvivorDesc.java
-    [SurvivorDesc.class] = {
-        -- 42.12: public void setWornItem(String str, InventoryItem inventoryItem)
-        -- 42.13: public void setWornItem(ItemBodyLocation itemBodyLocation, InventoryItem item)
-        setWornItem = function(orig, self, loc, item, ...)
-            if type(loc) == "string" then loc = convert_id(loc, "SurvivorDesc.setWornItem('%s')", loc) end
-            return orig(self, loc, item, ...)
-        end,
-    },
+-- SurvivorDesc, IsoGameCharacter, IsoPlayer that inherits from IsoGameCharacter:
+--   42.12: public void setWornItem(String str, InventoryItem inventoryItem)
+--   42.13: public void setWornItem(ItemBodyLocation itemBodyLocation, InventoryItem item)
+ZModUnbork.patch_all_metatables('setWornItem', {
+    setWornItem = function(orig, self, loc, item, ...)
+        if type(loc) == "string" then loc = convert_id(loc, "setWornItem('%s')", loc) end
+        return orig(self, loc, item, ...)
+    end
 })
 
 local function checkItem(item, phase)
@@ -88,7 +84,7 @@ local function checkItem(item, phase)
     local scriptTbl = zdk.parse_item_script(item)
     if not scriptTbl or not scriptTbl.bodylocation then return end
 
-    local newLoc = _locations_registry[scriptTbl.bodylocation] -- expect value be in lowercase already
+    local newLoc = _locations_registry[scriptTbl.bodylocation:lower()]
     if newLoc then
         logger:info("set %-13s to %-35s for %s", "bodyLocation", newLoc, item:getFullName())
         item:setBodyLocation(newLoc)

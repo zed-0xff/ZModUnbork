@@ -70,6 +70,7 @@ if isDebugEnabled() then return end
 zdk.hook({
     _G = {
         getClassField = function(orig, obj, fieldIdx, ...)
+            ZModUnbork.log_once("getClassField(%s, %s)", getClassSimpleName(obj), fieldIdx)
             local result = nil
 
             if instanceof(obj, "BodyLocationGroup") then
@@ -85,17 +86,11 @@ zdk.hook({
                 end
             end
 
-            if result then
-                logger:info("getClassField(%s, %s) => %s, called by %s", obj, fieldIdx, result, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
-                return result
-            else
-                logger:error("getClassField(%s, %s) called by %s", obj, fieldIdx, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
-            end
-
-            return orig(obj, fieldIdx, ...)
+            return result or orig(obj, fieldIdx, ...)
         end,
 
         getClassFieldVal = function(orig, obj, fieldObj, ...)
+            ZModUnbork.log_once("getClassFieldVal(%s, %s)", getClassSimpleName(obj), fieldObj)
             local result = nil
 
             if instanceof(obj, "BodyLocationGroup") then
@@ -115,14 +110,7 @@ zdk.hook({
                 end
             end
 
-            if result then
-                logger:info("getClassFieldVal(%s, %s) => %s, called by %s", obj, fieldObj, result, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
-                return result
-            else
-                logger:error("getClassFieldVal(%s, %s) called by %s", obj, fieldObj, zdk.get_call_origin_str(ZModUnbork.MOD_ID))
-            end
-
-            return orig(obj, fieldObj, ...)
+            return result or orig(obj, fieldObj, ...)
         end,
     },
 })

@@ -23,6 +23,11 @@ ProfessionFactory = {
         ZModUnbork.log_once("ProfessionFactory.getProfessions()")
         return CharacterProfessionDefinition.getProfessions()
     end,
+
+    Reset = function()
+        ZModUnbork.log_once("ProfessionFactory.Reset()")
+        -- no-op, but required for compatibility with 42.12
+    end,
 }
 
 -- 42.12: class CharacterProfession

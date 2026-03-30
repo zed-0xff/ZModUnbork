@@ -63,6 +63,15 @@ zdk.hook({
             end
             return orig(self, id, ...)
         end,
+
+        remove = function(orig, self, id, ...)
+            if type(id) == "string" then
+                local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+                ZModUnbork.log_once("CharacterTraits.remove(%s) => %s", id, trait)
+                id = trait
+            end
+            return orig(self, id, ...)
+        end,
     }
 })
 

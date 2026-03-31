@@ -32,7 +32,7 @@ local function parse_tags(item)
     local tags = {}
 
     if scriptTbl and scriptTbl.tags then
-        local tagList = scriptTbl.tags:split(";")
+        local tagList = scriptTbl.tags:lower():split(";")
         for _, tag in ipairs(tagList) do
             tags[tag] = true
         end

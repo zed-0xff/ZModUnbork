@@ -13,7 +13,7 @@ task :update do
 
     if line =~ /^\[h1\]Revived mods/
       out_lines << "[list]\n"
-      info['mods'].each do |id, name|
+      info['mods'].sort_by(&:last).each do |id, name|
         out_lines << "   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{id}]#{name}[/url]\n"
       end
       out_lines << "[/list]\n"

@@ -114,7 +114,7 @@ ZModUnbork.patch_all_metatables('getFullType', {
 --- tooltips
 
 local function checkItem(item)
-    local tooltip = item:getTooltip()
+    local tooltip = item.getTooltip and item:getTooltip()
     if type(tooltip) ~= "string" then return end
     if not luautils.stringStarts(tooltip, "Tooltip_") then return end
     if getTextOrNull(tooltip) then return end -- proper translation already exists

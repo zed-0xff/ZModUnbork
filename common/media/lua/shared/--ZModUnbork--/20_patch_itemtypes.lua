@@ -25,16 +25,16 @@ local function checkItem(item)
     local newType = ItemType.get(ResourceLocation.of(scriptTbl.type))
     if newType then
         if newType ~= curType then
-            logger:info("set %-13s to %-35s for %s", "itemType", newType, item:getFullName())
+            logger:info("change itemType from %s to %-15s for %s", curType, newType, item:getFullName())
             item:setItemType(newType)
 
             if newType == ItemType.WEAPON and scriptTbl.ammotype and item.getAmmoType and not item:getAmmoType() then
                 local ammoType = ZModUnbork.RegCache.convert_id(Registries.AMMO_TYPE, scriptTbl.ammotype, scriptTbl.ammotype)
                 if ammoType then
                     item:setAmmoType(ammoType)
-                    logger:info("set %-13s to %-35s for %s", "ammoType", ammoType, item:getFullName())
+                    logger:info("set ammoType to %-15s for %s", ammoType, item:getFullName())
                 else
-                    logger:warn("invalid ammoType %-20s for %s", scriptTbl.ammotype, item:getFullName())
+                    logger:warn("invalid ammoType %s for %s", scriptTbl.ammotype, item:getFullName())
                 end
             end
         end

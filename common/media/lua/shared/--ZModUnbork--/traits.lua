@@ -1,5 +1,6 @@
 -- mods unborked:
 --   DynamicTraits.2459400130
+--   JeevesPC.3693550188
 --   Rocky_SanityB42.3390307636
 
 -- TraitFactory was removed in 42.13
@@ -84,10 +85,11 @@ zdk.hook({
 --
 -- defined in IsoGameCharacter, so all metatables inheriting from it have to be patched
 local function patchedHasTrait(self, id)
+    zdk.logger:debug("patchedHasTrait(%s, %s)", self, id)
     local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
 
     if not trait then
-        ZModUnbork.warn_once("IsoGameCharacter.HasTrait('%s') => %s", id, trait)
+        ZModUnbork.warn_once("IsoGameCharacter.HasTrait('%s') => nil", id)
         return false
     end
 
@@ -102,5 +104,17 @@ ZModUnbork.augment_all_metatables('hasTrait', {
     getTraits = function(self)
         ZModUnbork.log_once("IsoGameCharacter.getTraits()")
         return self:getCharacterTraits()
+    end,
+})
+
+-- JeevesPC.3693550188
+ZModUnbork.patch_all_metatables('hasTrait', {
+    hasTrait = function(orig, self, id, ...)
+        if type(id) == "string" then
+            local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+            ZModUnbork.log_once("hasTrait(%s) => %s", id, trait)
+            id = trait
+        end
+        return orig(self, id, ...)
     end,
 })

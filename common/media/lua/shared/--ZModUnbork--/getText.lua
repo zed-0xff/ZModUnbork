@@ -8,6 +8,8 @@ local PREFIXES = {
     "ContextMenu_",
     "IGUI_",
     "ItemName_",
+    "Recipe_",
+    "Sandbox_",
     "Tooltip_",
     "UI_",
 }
@@ -71,6 +73,8 @@ local function init_cache()
         process_file(mod_id, "media/lua/shared/Translate/EN/ContextMenu_EN.txt")
         process_file(mod_id, "media/lua/shared/Translate/EN/IG_UI_EN.txt")
         process_file(mod_id, "media/lua/shared/Translate/EN/ItemName_EN.txt")
+        process_file(mod_id, "media/lua/shared/Translate/EN/Recipes_EN.txt")
+        process_file(mod_id, "media/lua/shared/Translate/EN/Sandbox_EN.txt")
         process_file(mod_id, "media/lua/shared/Translate/EN/Tooltip_EN.txt")
         process_file(mod_id, "media/lua/shared/Translate/EN/UI_EN.txt")
     end

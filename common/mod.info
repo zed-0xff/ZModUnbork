@@ -11,5 +11,5 @@ poster=icon_256.png
 description=Patches renamed or changed game API so old mods keep working on newer game builds.
 
 require=\zdk
-loadModBefore=\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS
+loadModBefore=\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod
 loadfirst=true

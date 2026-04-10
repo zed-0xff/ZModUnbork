@@ -160,7 +160,6 @@ local function fix_ClothesBoxRedux()
     end
 end
 
--- supposed to run AFTER all other OnGameBoot events
 local function checkClothesBoxRedux2()
     local cbx999 = ItemBodyLocation.get(ResourceLocation.of("cbx:999"))
     if not cbx999 then
@@ -175,6 +174,7 @@ local function checkClothesBoxRedux2()
     fix_ClothesBoxRedux()
 end
 
+-- run after all other OnGameBoot events
 local function checkClothesBoxRedux1()
     Events.OnGameBoot.Add(checkClothesBoxRedux2)
 end

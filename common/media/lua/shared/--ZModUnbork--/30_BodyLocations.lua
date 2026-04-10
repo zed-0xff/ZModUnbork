@@ -72,6 +72,10 @@ zdk.hook({
 --   42.13: public void setWornItem(ItemBodyLocation itemBodyLocation, InventoryItem item)
 ZModUnbork.patch_all_metatables('setWornItem', {
     setWornItem = function(orig, self, loc, item, ...)
+        if not loc then
+            ZModUnbork.warn_once("setWornItem called with nil loc for %s", self)
+            return
+        end
         if type(loc) == "string" then loc = convert_id(loc, "setWornItem('%s')", loc) end
         return orig(self, loc, item, ...)
     end
@@ -128,13 +132,13 @@ end
 
 local function patchBodyLocationsAfterAll()
     logger:info("patchBodyLocationsAfterAll()")
-    patchItems(1)
+    patchItems(2)
 end
 
 local function patchBodyLocationsBeforeAll()
     logger:info("patchBodyLocationsBeforeAll()")
     Events.OnGameBoot.Add(patchBodyLocationsAfterAll)
-    patchItems(2)
+    patchItems(1)
     patchClothingSelectionDefinitions()
 end
 

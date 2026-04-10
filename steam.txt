@@ -25,6 +25,7 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
 [list]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2893930681]Anthro Survivors (the "Furry Mod")[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3069465403]Chocolate Pack[/url]
+   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2847911733]Clothes Box Redux[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2459400130]Dynamic Traits[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3426711866]Fallout Food Mod B42[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3238978135]Furry Apocalypse (Anthro Zombies)[/url]

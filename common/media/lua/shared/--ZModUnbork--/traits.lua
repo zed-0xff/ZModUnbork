@@ -85,7 +85,6 @@ zdk.hook({
 --
 -- defined in IsoGameCharacter, so all metatables inheriting from it have to be patched
 local function patchedHasTrait(self, id)
-    zdk.logger:debug("patchedHasTrait(%s, %s)", self, id)
     local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
 
     if not trait then

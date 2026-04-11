@@ -16,6 +16,9 @@ task :update do
       info['mods'].sort_by(&:last).each do |id, name|
         out_lines << "   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{id}]#{name}[/url]\n"
       end
+      info['mod_pairs'].each do |pair|
+        out_lines << "   [*]" + pair.map{ |id, name| "[url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{id}]#{name}[/url]" }.join(" + ") + "\n"
+      end
       out_lines << "[/list]\n"
       out_lines << "\n"
         

@@ -1,9 +1,50 @@
-task :default => :update
+task :default => [:update, :build]
+
+MOD_ID   = "ZModUnbork"
+MOD_TYPE = "shared"
+VERSIONS = {
+  "42" => "17",
+}
+
+VERSIONS.each do |ver, jdk_ver|
+  desc "build for #{ver}"
+  task "build:#{ver}" do
+    Dir.chdir("java") do
+      env = {
+        "JAVA_HOME" => "/Library/Java/JavaVirtualMachines/openjdk-#{jdk_ver}.jdk/Contents/Home"
+      }
+      sh env, "gradle build -PZVersion=#{ver}"
+    end
+    dst_dir = "#{ver}/media/java/#{MOD_TYPE}"
+    FileUtils.mkdir_p dst_dir
+    FileUtils.mv "java/build/libs/#{MOD_ID}-#{ver}.jar", "#{dst_dir}/#{MOD_ID}.jar"
+  end
+end
+
+desc "build all"
+task :build => VERSIONS.keys.map { |ver| "build:#{ver}" }
 
 task :update do
   require 'yaml'
   info = YAML.load_file('info.yml')
   in_lines = File.readlines('steam.txt')
+
+  class ModInfo
+    attr_accessor :id, :title, :zb, :comment
+
+    def initialize(id, m)
+      @id = id
+      @zb = false
+      if m.is_a?(String)
+        @title = m
+      else
+        @comment = m['comment']
+        @title   = m['title']
+        @zb      = m['zb']
+        @comment ||= " (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] for java-side patches)" if @zb
+      end
+    end
+  end
 
   out_lines = []
   i = 0
@@ -13,8 +54,9 @@ task :update do
 
     if line =~ /^\[h1\]Revived mods/
       out_lines << "[list]\n"
-      info['mods'].sort_by(&:last).each do |id, name|
-        out_lines << "   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{id}]#{name}[/url]\n"
+      mods = info['mods'].map { |id,m| ModInfo.new(id, m) }
+      mods.sort_by(&:title).each do |m|
+        out_lines << "   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{m.id}]#{m.title}[/url]#{m.comment}\n"
       end
       info['mod_pairs'].each do |pair|
         out_lines << "   [*]" + pair.map{ |id, name| "[url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{id}]#{name}[/url]" }.join(" + ") + "\n"

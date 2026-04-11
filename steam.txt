@@ -30,6 +30,7 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3426711866]Fallout Food Mod B42[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3238978135]Furry Apocalypse (Anthro Zombies)[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3043243994]Hanabi's Food[/url]
+   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400448921]Handmade maps: Interactive Mapping[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] for java-side patches)
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400782481]Item Comparison[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3600401184]Realistic Temperature Mod[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3564838872]Rebalanced Yields: Butchering[/url]

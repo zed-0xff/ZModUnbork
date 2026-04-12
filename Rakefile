@@ -72,3 +72,8 @@ task :update do
 
   File.write('steam.txt', out_lines.join)
 end
+
+desc "show steam url"
+task :url do
+  puts "https://steamcommunity.com/sharedfiles/filedetails/?id=3677147974"
+end

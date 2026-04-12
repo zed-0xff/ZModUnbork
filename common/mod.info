@@ -11,9 +11,9 @@ poster=icon_256.png
 description=Patches renamed or changed game API so old mods keep working on newer game builds.
 
 require=\zdk
-loadModBefore=\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod
+loadModBefore=\Bandits2,\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod
 loadfirst=true
 
-ZBVersionMin=1.7.0
+ZBVersionMin=1.7.1
 javaJarFile=media/java/shared/ZModUnbork.jar
 javaPkgName=me.zed_0xff.z_mod_unbork

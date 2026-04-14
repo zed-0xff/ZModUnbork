@@ -3,7 +3,6 @@ if not getActivatedMods():contains("Bandits2") then return end
 if not getActivatedMods():contains("PROJECTRVInterior42") then return end
 
 local rvf = nil
-if not rvf then return end
 
 RVInterior = {}
 function RVInterior.playerInsideInterior(player)

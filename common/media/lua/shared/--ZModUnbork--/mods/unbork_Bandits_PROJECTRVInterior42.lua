@@ -1,11 +1,9 @@
-if RVInterior then return end
 if not getActivatedMods():contains("Bandits2") then return end
 if not getActivatedMods():contains("PROJECTRVInterior42") then return end
 
 local rvf = nil
 
-RVInterior = {}
-function RVInterior.playerInsideInterior(player)
+function ZModUnbork.playerInsideInterior(player)
     ZModUnbork.log_once("RVInterior.playerInsideInterior()")
     if CheckIfInRV then
         -- MP
@@ -19,3 +17,22 @@ function RVInterior.playerInsideInterior(player)
         end
     end
 end
+
+local function preventBanditsInRVArea()
+    if RVInterior and RVInterior.playerInsideInterior then
+        -- patch existing function
+        zdk.hook({
+            RVInterior = {
+                playerInsideInterior = function(orig, player, ...)
+                    return orig(player, ...) or ZModUnbork.playerInsideInterior(player)
+                end
+            }
+        })
+    else
+        -- define our own
+        RVInterior = RVInterior or {}
+        RVInterior.playerInsideInterior = ZModUnbork.playerInsideInterior
+    end
+end
+
+Events.OnGameBoot.Add(preventBanditsInRVArea)

@@ -104,12 +104,12 @@ local function try_translate_item(result, fullType)
 end
 
 -- Item, what else?
-ZModUnbork.patch_all_metatables('getFullName', {
+zdk.patch_all_metatables('getFullName', {
     getDisplayName = function(orig, self, ...) return try_translate_item(orig(self, ...), self:getFullName()) end
 })
 
 -- InventoryItem, Clothing, HandWeapon, ...
-ZModUnbork.patch_all_metatables('getFullType', {
+zdk.patch_all_metatables('getFullType', {
     getDisplayName      = function(orig, self, ...) return try_translate_item(orig(self, ...), self:getFullType()) end,
     getName             = function(orig, self, ...) return try_translate_item(orig(self, ...), self:getFullType()) end,
     getCustomMenuOption = function(orig, ...)       return try_translate(orig(...)) end,

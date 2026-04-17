@@ -70,7 +70,7 @@ zdk.hook({
 -- SurvivorDesc, IsoGameCharacter, IsoPlayer that inherits from IsoGameCharacter:
 --   42.12: public void setWornItem(String str, InventoryItem inventoryItem)
 --   42.13: public void setWornItem(ItemBodyLocation itemBodyLocation, InventoryItem item)
-ZModUnbork.patch_all_metatables('setWornItem', {
+zdk.patch_all_metatables('setWornItem', {
     setWornItem = function(orig, self, loc, item, ...)
         if not loc then
             ZModUnbork.warn_once("setWornItem called with nil loc for %s", self)

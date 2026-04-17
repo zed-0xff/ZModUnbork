@@ -69,6 +69,6 @@ local function patchedHasTag(orig, self, ...)
     return orig(self, ...)
 end
 
-ZModUnbork.patch_all_metatables('hasTag', {
+zdk.patch_all_metatables('hasTag', {
     hasTag = patchedHasTag
 })

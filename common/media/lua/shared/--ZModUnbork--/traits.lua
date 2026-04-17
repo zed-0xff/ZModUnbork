@@ -97,7 +97,7 @@ local function patchedHasTrait(self, id)
     return result
 end
 
-ZModUnbork.augment_all_metatables('hasTrait', {
+zdk.augment_all_metatables('hasTrait', {
     HasTrait = patchedHasTrait,
 
     getTraits = function(self)
@@ -107,7 +107,7 @@ ZModUnbork.augment_all_metatables('hasTrait', {
 })
 
 -- JeevesPC.3693550188
-ZModUnbork.patch_all_metatables('hasTrait', {
+zdk.patch_all_metatables('hasTrait', {
     hasTrait = function(orig, self, id, ...)
         if type(id) == "string" then
             local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))

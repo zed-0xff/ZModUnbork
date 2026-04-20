@@ -1,7 +1,3 @@
-local inv_item = instanceItem("Base.Belt2") -- zombie/inventory/InventoryItem.java
-local item     = inv_item:getScriptItem()   -- zombie/scripting/objects/Item.java
-local tags     = inv_item:getTags()         -- Set<ItemTag>
-
 -- zombie/inventory/InventoryItem.java
 -- zombie/scripting/objects/Item.java
 --
@@ -9,10 +5,15 @@ local tags     = inv_item:getTags()         -- Set<ItemTag>
 -- 42.13.1  public Set<ItemTag>      getTags() - does not have get(index) method
 --
 -- patches metatable for Set<ItemTag>, so both InventoryItem.getTags and Item.getTags are affected
-zdk.augment_metatable(tags, {
+zdk.augment_metatable(HashSet.class, {
     get = function(self, index)
-        local tag = self:toArray()[index+1] -- can be NULL if tag is not registered: [base:firearm, null, base:hasmetal]
-        return tag and tag:toString() or ""
+        local obj = self:toArray()[index+1] -- can be NULL if obj is not registered: [base:firearm, null, base:hasmetal]
+        if instanceof(obj, "ItemTag") then
+            return obj and obj:toString() or ""
+        else
+            -- 42.17: getCell():getVehicles() returns a Set<BaseVehicle> which also lands here
+            return obj
+        end
     end
 })
 

@@ -23,7 +23,5 @@ Type = {
 }
 
 zdk.augment_metatable( Item.class, {
-    getType = function(self)
-        return self:getItemType()
-    end,
+    getType = "getItemType",
 })

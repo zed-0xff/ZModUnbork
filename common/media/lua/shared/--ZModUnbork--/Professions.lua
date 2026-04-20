@@ -1,5 +1,7 @@
 -- mods unborked:
 --   DynamicTraits.2459400130
+--   CombatMasteringSkill.3435985650
+--   SkillRecoveryJournal.2503622437
 
 -- ProfessionFactory was removed in 42.13
 if ProfessionFactory then return end
@@ -48,14 +50,15 @@ zdk.augment_metatable( CharacterProfessionDefinition.class, {
         ZModUnbork.log_once("Profession.addFreeTrait('%s') => %s", id, trait)
         self:addGrantedTrait(trait)
     end,
-
-    -- 42.12: getFreeRecipes
-    -- 42.13: getGrantedRecipes
-    getFreeRecipes = function(self)
-        ZModUnbork.log_once("Profession.getFreeRecipes()")
-        return self:getGrantedRecipes()
-    end,
 })
+
+-- 42.12: Profession.getFreeRecipes()
+-- 42.13: CharacterProfessionDefinition.getGrantedRecipes()
+ZModUnbork.patch_method_alias(CharacterProfessionDefinition.class, "getFreeRecipes", "getGrantedRecipes")
+
+-- 42.12: HashMap<PerkFactory.Perk, Integer> Profession.getXPBoostMap()
+-- 42.13: HashMap<PerkFactory.Perk, Integer> CharacterProfessionDefinition.getXpBoosts()
+ZModUnbork.patch_method_alias(CharacterProfessionDefinition.class, "getXPBoostMap", "getXpBoosts")
 
 zdk.augment_metatable( SurvivorDesc.class, {
     -- 42.12: public string getProfession()
@@ -69,6 +72,7 @@ zdk.augment_metatable( SurvivorDesc.class, {
 -- 42.12: 'doMetalWorkerRecipes = function (metalworker)'
 -- 42.13: -
 if doMetalWorkerRecipes then return end
+
 function doMetalWorkerRecipes(metalworker)
     ZModUnbork.log_once("doMetalWorkerRecipes(%s)", metalworker.getLabel and metalworker:getLabel() or tostring(metalworker))
 

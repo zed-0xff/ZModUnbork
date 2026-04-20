@@ -30,20 +30,20 @@ local MAP = {
 }
 
 local tbl = {
-    getEndurancelast        = function(self)    return self:getLastEndurance() end,
-    setEndurancelast        = function(self, f) return self:setLastEndurance(f) end,
+    getEndurancelast        = "getLastEndurance",
+    setEndurancelast        = "setLastEndurance",
 
-    getEndurancedanger      = function(self)    return self:getEnduranceDangerWarning() end,
+    getEndurancedanger      = "getEnduranceDangerWarning",
     setEndurancedanger      = function() end,
 
-    getEndurancewarn        = function(self)    return self:getEnduranceWarning() end,
+    getEndurancewarn        = "getEnduranceWarning",
     setEndurancewarn        = function() end,
 
-    getStressFromCigarettes = function(self)    return self:getNicotineStress() end,
+    getStressFromCigarettes = "getNicotineStress",
     setStressFromCigarettes = function() end,
 
-    getFear                 = function(self)    return self:getPanic() end,  -- XXX not sure
-    setFear                 = function(self, f) return self:setPanic(f) end, -- XXX not sure
+    getFear                 = "getPanic", -- XXX not sure
+    setFear                 = "setPanic", -- XXX not sure
 }
 
 for k, v in pairs(MAP) do

@@ -8,15 +8,16 @@ local logger = ZModUnbork.logger
 
 -- Add alias for method: if obj has nameA, add nameB that calls nameA (and vice versa).
 -- Only one of (name_a, name_b) should exist on obj; the other is patched in.
-function ZModUnbork.patch_method_alias(obj, name_a, name_b)
-    if not obj or not name_a or not name_b then return end
-    local patch = {}
-    if obj[name_a] then
-        patch[name_b] = obj[name_a]
-    elseif obj[name_b] then
-        patch[name_a] = obj[name_b]
+function ZModUnbork.patch_method_alias(klass, name_a, name_b)
+    if not klass or not name_a or not name_b then return end
+
+    if klass == "*" then
+        zdk.augment_all_metatables(name_a, { [name_b] = name_a })
+        zdk.augment_all_metatables(name_b, { [name_a] = name_b })
+    else
+        -- augment_metatable() will only patch if the method doesn't already exist, so this is safe to call even if both name_a and name_b already exist on klass
+        zdk.augment_metatable(klass, { [name_a] = name_b, [name_b] = name_a })
     end
-    if not table.isempty(patch) then zdk.augment_metatable(obj, patch) end
 end
 
 function ZModUnbork.fix_id(id)

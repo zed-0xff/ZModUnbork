@@ -46,10 +46,7 @@ zdk.augment_metatable( CharacterTraitDefinition.class, {
 
     -- 42.12: getFreeRecipes
     -- 42.13: getGrantedRecipes
-    getFreeRecipes = function(self)
-        ZModUnbork.log_once("Trait.getFreeRecipes()")
-        return self:getGrantedRecipes()
-    end,
+    getFreeRecipes = "getGrantedRecipes",
 })
 
 zdk.hook({
@@ -76,6 +73,10 @@ zdk.hook({
     }
 })
 
+-- 42.12: HashMap<PerkFactory.Perk, Integer> Trait.getXPBoostMap()
+-- 42.13: HashMap<PerkFactory.Perk, Integer> CharacterTraitDefinition.getXpBoosts()
+ZModUnbork.patch_method_alias(CharacterTraitDefinition.class, "getXPBoostMap", "getXpBoosts")
+
 -- 42.12:
 --   public boolean HasTrait(TraitCollection.TraitSlot traitSlot)
 --   public boolean HasTrait(String str)
@@ -97,13 +98,9 @@ local function patchedHasTrait(self, id)
     return result
 end
 
-zdk.augment_all_metatables('hasTrait', {
-    HasTrait = patchedHasTrait,
-
-    getTraits = function(self)
-        ZModUnbork.log_once("IsoGameCharacter.getTraits()")
-        return self:getCharacterTraits()
-    end,
+zdk.augment_all_metatables("hasTrait", {
+    HasTrait  = patchedHasTrait,
+    getTraits = "getCharacterTraits", -- method alias
 })
 
 -- JeevesPC.3693550188

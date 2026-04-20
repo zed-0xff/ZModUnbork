@@ -1,7 +1,6 @@
 -- mods unborked:
 --   DynamicTraits.2459400130
 --   CombatMasteringSkill.3435985650
---   SkillRecoveryJournal.2503622437
 
 -- ProfessionFactory was removed in 42.13
 if ProfessionFactory then return end

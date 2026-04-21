@@ -13,6 +13,10 @@ zdk.augment_all_metatables("moveUnmodded", {
     Move = function(self, dir)
         self:moveUnmodded(dir:getX(), dir:getY())
     end,
+
+    MoveUnmodded = function(self, dir)
+        self:moveUnmodded(dir:getX(), dir:getY())
+    end,
 })
 
 -- zombie/iso/IsoCell.java

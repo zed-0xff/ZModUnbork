@@ -13,11 +13,17 @@ VERSIONS.each do |ver, jdk_ver|
       env = {
         "JAVA_HOME" => "/Library/Java/JavaVirtualMachines/openjdk-#{jdk_ver}.jdk/Contents/Home"
       }
-      sh env, "gradle build -PZVersion=#{ver}"
+      sh env, "gradle build -PZVersion=#{ver} -PsteamId=zed_0xff"
     end
     dst_dir = "#{ver}/media/java/#{MOD_TYPE}"
     FileUtils.mkdir_p dst_dir
-    FileUtils.mv "java/build/libs/#{MOD_ID}-#{ver}.jar", "#{dst_dir}/#{MOD_ID}.jar"
+    jar_dst = "#{dst_dir}/#{MOD_ID}.jar"
+    libs_jar = "java/build/libs/#{MOD_ID}-#{ver}.jar"
+    libs_zbs = "#{libs_jar}.zbs"
+    FileUtils.mv libs_jar, jar_dst
+    if File.exist?(libs_zbs)
+      FileUtils.mv libs_zbs, "#{jar_dst}.zbs"
+    end
   end
 end
 

@@ -1,6 +1,12 @@
+buildscript {
+    repositories { mavenCentral() }
+    dependencies {
+        classpath 'org.bouncycastle:bcprov-jdk18on:1.78.1'
+    }
+}
+
 plugins { id 'java' }
 
-def osName = System.getProperty("os.name").toLowerCase()
 def HOME_DIR = System.getProperty("user.home")
 
 def CUR_GAME_DIR = "${HOME_DIR}/Library/Application Support/Steam/steamapps/common/ProjectZomboid/Project Zomboid.app/Contents/Java"
@@ -11,6 +17,8 @@ if (!ZVersion) throw new GradleException('ZVersion must be set (e.g. -PZVersion=
 
 def variant = 'B' + ZVersion.replace('.', '_')
 def GAME_DIR = "${HOME_DIR}/projects/zomboid/versions/${ZVersion}"
+
+def modRoot = project.projectDir.parentFile
 
 dependencies {
     compileOnly files("${CUR_GAME_DIR}/ZombieBuddy.jar")
@@ -47,6 +55,90 @@ tasks.withType(JavaCompile).configureEach {
     options.generatedSourceOutputDirectory.set(provider { null })
     options.headerOutputDirectory.set(provider { null })
     options.incremental = false
+}
+
+def hexBytes = { byte[] b ->
+    def sb = new StringBuilder(b.length * 2)
+    for (byte x : b) {
+        sb.append(String.format('%02x', x & 0xff))
+    }
+    sb.toString()
+}
+
+/** Steam account name / custom URL id: >=3 chars, [a-zA-Z0-9_]. */
+def STEAM_ID_PATTERN = ~/^[a-zA-Z0-9_]{3,}$/
+
+tasks.register('signJarZBS') {
+    dependsOn jar
+
+    def jarTask = tasks.named('jar')
+    inputs.file(jarTask.get().archiveFile)
+    outputs.file(layout.buildDirectory.file("libs/${MOD_ID}-${ZVersion}.jar.zbs"))
+
+    doLast {
+        def steamId = findProperty('steamId')
+        if (!steamId?.trim()) {
+            throw new GradleException('signJarZBS: set steamId (-PsteamId=)')
+        }
+        steamId = steamId.trim()
+        if (!(steamId ==~ STEAM_ID_PATTERN)) {
+            throw new GradleException(
+                "signJarZBS: steam_id must be at least 3 characters and only [a-zA-Z0-9_], got: ${steamId}"
+            )
+        }
+
+        def keyPath = findProperty('ed25519PrivateKeyFile') ?: System.getenv('ZB_ED25519_PRIVATE_KEY_FILE')
+        def keyFile = keyPath ? file(keyPath) : null
+        if (!keyPath?.trim() || !keyFile || !keyFile.isFile()) {
+            throw new GradleException(
+                "signJarZBS: missing Ed25519 PKCS#8 DER private key (${keyPath}).\n" +
+                    'Generate with: openssl genpkey -algorithm ed25519 -outform DER -out ~/.signing/ed25519-private.der\n' +
+                    '(on OSX use openssl from homebrew, not the system one, to get Ed25519 support)\n' +
+                    'And pass -Ped25519PrivateKeyFile=... or set ZB_ED25519_PRIVATE_KEY_FILE.'
+            )
+        }
+
+        // get public key fingerprint:
+        //   openssl pkey -in ed25519-private.der -pubout -outform DER | tail -c 32 | sha256
+
+        def jarFile = jarTask.get().archiveFile.get().asFile
+        def jarDigest = java.security.MessageDigest.getInstance('SHA-256')
+        jarFile.withInputStream { is ->
+            byte[] buf = new byte[8192]
+            int n
+            while ((n = is.read(buf)) != -1) {
+                jarDigest.update(buf, 0, n)
+            }
+        }
+        def jarShaHex = hexBytes(jarDigest.digest())
+
+        def canonical = "ZBS:${steamId}:${jarShaHex}"
+        def messageBytes = canonical.getBytes(java.nio.charset.StandardCharsets.UTF_8)
+
+        def pkcs8 = keyFile.bytes
+        def pkInfo = org.bouncycastle.asn1.pkcs.PrivateKeyInfo.getInstance(pkcs8)
+        def asym = org.bouncycastle.crypto.util.PrivateKeyFactory.createKey(pkInfo)
+        def priv = (org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters) asym
+        def pubHex = hexBytes(priv.generatePublicKey().getEncoded())
+
+        def signer = new org.bouncycastle.crypto.signers.Ed25519Signer()
+        signer.init(true, priv)
+        signer.update(messageBytes, 0, messageBytes.length)
+        def sigBytes = signer.generateSignature()
+        def sigHex = hexBytes(sigBytes)
+
+        def outFile = new File(jarFile.parentFile, jarFile.name + '.zbs')
+        // Public key is published on the author's Steam profile as JavaModZBS:${pubHex} (not in this file).
+        outFile.setText(
+            "ZBS\nsteam_id:${steamId}\nsignature:${sigHex}\n",
+            java.nio.charset.StandardCharsets.UTF_8.name()
+        )
+        println "(add JavaModZBS:${pubHex} to your Steam profile summary)"
+    }
+}
+
+tasks.named('jar') {
+    finalizedBy 'signJarZBS'
 }
 
 tasks.register("cleanup") {

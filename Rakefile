@@ -13,7 +13,7 @@ VERSIONS.each do |ver, jdk_ver|
       env = {
         "JAVA_HOME" => "/Library/Java/JavaVirtualMachines/openjdk-#{jdk_ver}.jdk/Contents/Home"
       }
-      sh env, "gradle build -PZVersion=#{ver} -PsteamId=zed_0xff"
+      sh env, "gradle build -PZVersion=#{ver}"
     end
     dst_dir = "#{ver}/media/java/#{MOD_TYPE}"
     FileUtils.mkdir_p dst_dir

@@ -12,10 +12,14 @@ helpers:
 #  - log_packets
 
 mods:
+  - { id: "zdk", steam_id: 3690770492 }
   - { id: "ZModUnbork", path: "." }
 
 game_versions:
   - 42.12
   - 42.13.1
   - 42.13.2
+  - 42.14.1
+  - 42.15
+  - 42.16
   - unstable

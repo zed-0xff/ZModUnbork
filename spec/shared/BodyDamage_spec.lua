@@ -1,5 +1,5 @@
 describe("BodyDamage", function()
-    local bodyDamage = get_player():get_body_damage()
+    local bodyDamage = get_player():getBodyDamage()
 
     describe("getUnhappynessLevel", function()
         it("is a function", function()
@@ -48,6 +48,6 @@ describe("BodyDamage", function()
             assert.eq(expected, get_player():getStats():get(CharacterStat.BOREDOM))
         end)
     end)
-end
+end)
 
 return ZBSpec.runAsync()

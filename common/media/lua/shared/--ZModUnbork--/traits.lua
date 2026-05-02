@@ -86,15 +86,21 @@ ZModUnbork.patch_method_alias(CharacterTraitDefinition.class, "getXPBoostMap", "
 --
 -- defined in IsoGameCharacter, so all metatables inheriting from it have to be patched
 local function patchedHasTrait(self, id)
-    local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+    local trait = nil
+    if type(id) == "string" then
+        trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+    else
+        -- CharacterTrait object?
+        trait = id
+    end
 
     if not trait then
-        ZModUnbork.warn_once("IsoGameCharacter.HasTrait('%s') => nil", id)
+        ZModUnbork.warn_once("IsoGameCharacter.HasTrait(%s) => nil", id)
         return false
     end
 
     local result = self:hasTrait(trait)
-    ZModUnbork.log_once("IsoGameCharacter.HasTrait('%s') => %s", id, result)
+    ZModUnbork.log_once("IsoGameCharacter.HasTrait(%s) => %s", id, result)
     return result
 end
 

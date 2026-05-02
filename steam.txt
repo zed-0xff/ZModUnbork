@@ -24,6 +24,7 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
 [h1]Revived mods (work on 42.13+)[/h1]
 [list]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2893930681]Anthro Survivors (the "Furry Mod")[/url]
+   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2460154811]Brita 2[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3069465403]Chocolate Pack[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2847911733]Clothes Box Redux[/url]
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3435985650]Combat Mastering Skill[/url]

@@ -25,7 +25,12 @@ mods:
   3387110070: They Knew
   3535295548: UNOFFICIAL Fools New Containers for B42
   3656879408: Zombie Infection Vaccine
-  3400448921: { title: "Handmade maps: Interactive Mapping", zb: true }
+
+zb_mods:
+  3400448921: "Handmade maps: Interactive Mapping"
+
+b41_mods:
+  2460154811: Brita 2
 
 mod_pairs:
   - 3268487204: Bandits

@@ -1,4 +1,4 @@
-task :default => [:update, :build]
+task :default => [:info, :build]
 
 MOD_ID   = "ZModUnbork"
 MOD_TYPE = "shared"
@@ -30,7 +30,8 @@ end
 desc "build all"
 task :build => VERSIONS.keys.map { |ver| "build:#{ver}" }
 
-task :update do
+desc "update steam.txt from info.yml"
+task :info do
   require 'yaml'
   info = YAML.load_file('info.yml')
   in_lines = File.readlines('steam.txt')
@@ -38,19 +39,20 @@ task :update do
   class ModInfo
     attr_accessor :id, :title, :zb, :comment
 
-    def initialize(id, m)
-      @id = id
-      @zb = false
-      if m.is_a?(String)
-        @title = m
-      else
-        @comment = m['comment']
-        @title   = m['title']
-        @zb      = m['zb']
-        @comment ||= " (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] for java-side patches)" if @zb
-      end
+    def initialize(id, title:, comment: nil, zb: false, exhume: false)
+      @id      = id
+      @comment = comment
+      @title   = title
+      @comment ||= " (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] for java-side patches)" if zb
+      @comment ||= " (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)" if exhume
     end
   end
+
+  mods = [
+    info['mods'].map     { |id, title| ModInfo.new(id, title:) },
+    info['zb_mods'].map  { |id, title| ModInfo.new(id, title:, zb: true) },
+    info['b41_mods'].map { |id, title| ModInfo.new(id, title:, exhume: true) },
+  ].map(&:to_a).flatten.sort_by(&:title)
 
   out_lines = []
   i = 0
@@ -60,8 +62,7 @@ task :update do
 
     if line =~ /^\[h1\]Revived mods/
       out_lines << "[list]\n"
-      mods = info['mods'].map { |id,m| ModInfo.new(id, m) }
-      mods.sort_by(&:title).each do |m|
+      mods.each do |m|
         out_lines << "   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{m.id}]#{m.title}[/url]#{m.comment}\n"
       end
       info['mod_pairs'].each do |pair|

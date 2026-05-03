@@ -90,7 +90,7 @@ local function try_translate(key)
 
     local translated = _cache[key]
     if translated then
-        ZModUnbork.log_once('translated "%s" -> "%s"', key, translated)
+        ZModUnbork.logger:info_once('translated "%s" -> "%s"', key, translated)
         return translated
     end
     return key

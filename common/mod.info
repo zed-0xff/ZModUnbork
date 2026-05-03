@@ -11,7 +11,7 @@ poster=icon_256.png
 description=Patches renamed or changed game API so old mods keep working on newer game builds.
 
 require=\zdk
-loadModBefore=\Bandits2,\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod,\CombatMasteringSkill,\Brita_2
+loadModBefore=\Bandits2,\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod,\CombatMasteringSkill,\Brita,\Brita_2
 loadfirst=true
 
 ZBVersionMin=1.7.2

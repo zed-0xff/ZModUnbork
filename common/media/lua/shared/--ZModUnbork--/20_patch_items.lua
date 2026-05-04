@@ -1,4 +1,5 @@
 -- mods unborked:
+--   ArsenalGunFighter.2297098490 (B41)
 --   Furry.2893930681
 --   FurryApocalypseAnthroAccessories.3238978135
 --   newcontainers_B42.3535295548
@@ -78,7 +79,7 @@ end
 local _maxTypeLen = 15
 
 local function checkItem(item)
-    if not item.getItemType or not item.setItemType then return end
+    if not item.setItemType then return end
 
     local curType = item:getItemType()
     if curType and curType ~= ItemType.NORMAL then return end -- already fixed
@@ -121,6 +122,15 @@ local function patchItemTypes()
         local item = items:get(i)
         if item:getModID() ~= ScriptManager.VanillaID then
             checkItem(item)
+            if item:getItemType() == ItemType.LITERATURE then
+                local scriptTbl = zdk.parse_item_script(item)
+                -- 41.78: TeachedRecipes
+                -- 42.12: LearnedRecipes
+                if scriptTbl and scriptTbl.teachedrecipes then
+                    logger:info("set LearnedRecipes to %S for %s", scriptTbl.teachedrecipes, item:getFullName())
+                    item:DoParam("LearnedRecipes", scriptTbl.teachedrecipes)
+                end
+            end
         end
     end
 end

@@ -60,5 +60,8 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3268487204]Bandits[/url] + [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3543229299]Project RV Interior[/url]
 [/list]
 
+[h1]Links[/h1]
+[url=https://github.com/zed-0xff/ZModUnbork]GitHub Repository[/url]
+
 [b]☕ Support the Developer:[/b]
 [url=https://ko-fi.com/zed_0xff][img]https://i.imgur.com/Utx6OIH.png[/img][/url]

@@ -40,8 +40,11 @@ task :info do
     attr_accessor :id, :title, :zb, :comment
 
     def initialize(id, title:, comment: nil, zb: false, exhume: false)
+      if title.is_a?(Hash)
+        title, comment = title.values_at("title", "comment")
+      end
       @id      = id
-      @comment = comment
+      @comment = comment ? " (#{comment})" : nil
       @title   = title
       @comment ||= " (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] for java-side patches)" if zb
       @comment ||= " (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)" if exhume

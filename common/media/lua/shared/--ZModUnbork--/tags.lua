@@ -1,3 +1,7 @@
+-- mods unborked:
+--   ArsenalGunFighter.2297098490 (B41)
+--   (lots of mods using string tags)
+
 -- zombie/inventory/InventoryItem.java
 -- zombie/scripting/objects/Item.java
 --
@@ -17,15 +21,6 @@ zdk.augment_metatable(HashSet.class, {
     end
 })
 
-
--- 42.12
---    public boolean hasTag(ItemTag itemTag) {
---    public boolean hasTag(String str) {
---
--- 42.13
---    public boolean hasTag(ItemTag itemTag) {
---    public boolean hasTag(ItemTag... tags) {
-
 local _cached_tags = {}
 
 local function parse_tags(item)
@@ -43,33 +38,55 @@ local function parse_tags(item)
 end
 
 local function patchedHasTag(orig, self, ...)
-    local args = {...}
-    if #args == 1 and type(args[1]) == "string" then
-        local tagName = args[1]
-
+    local nArgs = select("#", ...)
+    local tagName = select(1, ...)
+    if nArgs == 1 and type(tagName) == "string" then
         local fullType = (self.getFullType and self:getFullType()) or (self.getFullName and self:getFullName())
         if not fullType then
-            print("[ZModUnbork] ERROR: could not determine full type for", self)
+            ZModUnbork.warn_once("could not determine full type for %s", self)
             return false
         end
 
         local cachedTags = _cached_tags[fullType]
-        local firstTime = not cachedTags
-        if firstTime then
+        if not cachedTags then
             cachedTags = parse_tags(self)
             _cached_tags[fullType] = cachedTags
         end
 
         local result = cachedTags[tagName:lower()] or false
-        if firstTime then
-            print(string.format("[ZModUnbork] %s:hasTag('%s') => %s", tostring(fullType), tagName, tostring(result)))
-        end
+        ZModUnbork.log_once("%s:hasTag(%S) => %s", fullType, tagName, result)
         return result
     end
 
     return orig(self, ...)
 end
 
+-- 42.12
+--    public boolean hasTag(ItemTag itemTag) {
+--    public boolean hasTag(String str) {
+--
+-- 42.13
+--    public boolean hasTag(ItemTag itemTag) {
+--    public boolean hasTag(ItemTag... tags) {
 zdk.patch_all_metatables('hasTag', {
     hasTag = patchedHasTag
+})
+
+-- 42.12: public boolean IsoGameCharacter.hasEquippedTag(String str)
+-- 42.13: public boolean IsoGameCharacter.hasEquippedTag(ItemTag itemTag)
+zdk.patch_all_metatables('hasEquippedTag', {
+    hasEquippedTag = function(orig, self, tagName, ...)
+        if type(tagName) == "string" then
+            local hands = { 'getPrimaryHandItem', 'getSecondaryHandItem' }
+            for _, hand in ipairs(hands) do
+                local item = self[hand] and self[hand](self)
+                if item and item:hasTag(tagName) then
+                    return true
+                end
+            end
+            return false
+        end
+
+        return orig(self, tagName, ...)
+    end
 })

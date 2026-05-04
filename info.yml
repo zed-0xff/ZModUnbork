@@ -1,5 +1,6 @@
 mods:
   2893930681: Anthro Survivors (the "Furry Mod")
+  2335368829: Authentic Z - Lite
   3069465403: Chocolate Pack
   2847911733: Clothes Box Redux
   3435985650: Combat Mastering Skill
@@ -30,7 +31,11 @@ zb_mods:
   3400448921: "Handmade maps: Interactive Mapping"
 
 b41_mods:
-  2460154811: Brita 2
+  2200148440: Brita's Weapon Pack
+  2297098490: Arsenal GunFighter
+  2460154811: Brita's Armor Pack
+  2696120270: Simple Convert Vanilla to Brita
+  2169435993: { title: "Mod Options", comment: "may be required by other B41 mods" }
 
 mod_pairs:
   - 3268487204: Bandits

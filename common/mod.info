@@ -11,9 +11,9 @@ poster=icon_256.png
 description=Patches renamed or changed game API so old mods keep working on newer game builds.
 
 require=\zdk
-loadModBefore=\Bandits2,\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod,\CombatMasteringSkill,\Brita,\Brita_2
+loadModBefore=\Bandits2,\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod,\CombatMasteringSkill,\Brita,\Brita_2,\P4ThiefExpansion
 loadfirst=true
 
-ZBVersionMin=1.7.2
+ZBVersionMin=2.2.0
 javaJarFile=media/java/shared/ZModUnbork.jar
 javaPkgName=me.zed_0xff.z_mod_unbork

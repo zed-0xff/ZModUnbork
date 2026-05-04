@@ -42,6 +42,11 @@ function ZModUnbork.RegCache.convert_id(registry, id, ...)
     if cache[lowKey] == nil then -- values are object or false
         cache[lowKey] = false    -- do not spam log with errors if register fails
 
+        -- ArsenalGunFighter.2297098490: "Base.ShotgunShells"
+        -- if luautils.stringStarts(lowKey, "base.") then
+        --     id = id:sub(6)
+        -- end
+
         -- regClass.get() is equal to registry.get()
         local loc = regClass.get(ResourceLocation.of(id)) -- try standard locations first - Furry: bodyGroup:indexOf("Bandage")
         if not loc then

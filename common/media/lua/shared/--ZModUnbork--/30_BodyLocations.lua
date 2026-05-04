@@ -1,6 +1,7 @@
 -- unborked mods:
+--   ArsenalGunFighter.2297098490 (B41)
 --   FortniteFurryGirls
---   Furry
+--   FurryMod.2893930681
 --   newcontainers_B42.3535295548
 --   SoftAndGentleHoodie.3371049128
 
@@ -76,8 +77,22 @@ zdk.patch_all_metatables('setWornItem', {
             ZModUnbork.warn_once("setWornItem called with nil loc for %s", self)
             return
         end
-        if type(loc) == "string" then loc = convert_id(loc, "setWornItem('%s')", loc) end
+        if type(loc) == "string" then loc = convert_id(loc, "setWornItem(%s)", loc) end
         return orig(self, loc, item, ...)
+    end
+})
+
+-- SurvivorDesc, IsoGameCharacter, IsoPlayer that inherits from IsoGameCharacter:
+--   42.12: public InventoryItem getWornItem(String str)
+--   42.13: public InventoryItem getWornItem(ItemBodyLocation itemBodyLocation)
+zdk.patch_all_metatables('getWornItem', {
+    getWornItem = function(orig, self, loc, ...)
+        if not loc then
+            ZModUnbork.warn_once("getWornItem called with nil loc for %s", self)
+            return
+        end
+        if type(loc) == "string" then loc = convert_id(loc, "getWornItem(%s)", loc) end
+        return orig(self, loc, ...)
     end
 })
 

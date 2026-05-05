@@ -54,7 +54,7 @@ local function patchedHasTag(orig, self, ...)
         end
 
         local result = cachedTags[tagName:lower()] or false
-        ZModUnbork.clog_once('tags', "%s:hasTag(%S) => %s", fullType, tagName, result)
+        ZModUnbork.clog_once('hasTag', "%s:hasTag(%S) => %s", fullType, tagName, result)
         return result
     end
 
@@ -77,6 +77,7 @@ zdk.patch_all_metatables('hasTag', {
 zdk.patch_all_metatables('hasEquippedTag', {
     hasEquippedTag = function(orig, self, tagName, ...)
         if type(tagName) == "string" then
+            ZModUnbork.clog_once('hasEquippedTag', "hasEquippedTag(%S)", tagName)
             local hands = { 'getPrimaryHandItem', 'getSecondaryHandItem' }
             for _, hand in ipairs(hands) do
                 local item = self[hand] and self[hand](self)

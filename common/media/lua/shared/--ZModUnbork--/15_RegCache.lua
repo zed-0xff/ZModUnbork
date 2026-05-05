@@ -122,7 +122,10 @@ function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, register
         -- enabled by ZBExhume41 mod
         if regClass.registerBase and registerBaseArgs ~= false then
             needle = regClass.registerBase(id, unpack(registerBaseArgs))
-            if needle then break end
+            if needle then
+                ZModUnbork.stats.registerBase = (ZModUnbork.stats.registerBase or 0) + 1
+                break -- intentional break
+            end
         end
 
         -- registerBase is not available, and register() will fail if id has "base:" prefix
@@ -133,6 +136,8 @@ function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, register
         end
 
         needle = regClass.register(ZModUnbork.fix_id(id), unpack(registerArgs))
+        if needle then ZModUnbork.stats.register = (ZModUnbork.stats.register or 0) + 1 end -- no break here due to next unconditional break
+
         break
     end
 

@@ -3,6 +3,7 @@ ZModUnbork.RegCache = {}
 
 local logger = ZModUnbork.logger
 local _cache = {}
+local _regClassByRegistry = {} -- registry userdata -> regClass table (e.g. CharacterTrait); only set on success so empty/missing-class cases retry
 
 function ZModUnbork.RegCache.get_cache(registry)
     if not registry then
@@ -20,7 +21,15 @@ end
 
 -- AmmoType, ItemBodyLocation, etc.
 local function find_regClass(registry, id)
-    if not registry or not registry.values or registry:values():isEmpty() then
+    if not registry then
+        logger:error("find_regClass(%s, %S): invalid registry", registry, id)
+        return nil
+    end
+
+    local hit = _regClassByRegistry[registry]
+    if hit then return hit end
+
+    if not registry.values or registry:values():isEmpty() then
         logger:error("find_regClass(%s, %S): invalid registry", registry, id)
         return nil
     end
@@ -34,6 +43,7 @@ local function find_regClass(registry, id)
         return nil
     end
 
+    _regClassByRegistry[registry] = regClass
     return regClass
 end
 

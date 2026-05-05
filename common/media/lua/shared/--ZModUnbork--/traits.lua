@@ -7,12 +7,19 @@
 if TraitFactory then return end
 
 TraitFactory = {
-    -- 42.12 TraitFactory.addTrait()
+    -- 42.12:
+    --   public static Trait addTrait(String id, String name, int cost, String descr, boolean prof)
+    --   public static Trait addTrait(String id, String name, int cost, String descr, boolean prof, boolean removeInMP)
+    --
     -- 42.13 CharacterTrait.register() + CharacterTraitDefinition.addCharacterTraitDefinition()
     addTrait = function(id, name, price, description, is_profession)
-        ZModUnbork.log_once("TraitFactory.addTrait('%s', ...)", id)
+        ZModUnbork.log_once("TraitFactory.addTrait(%S, ...)", id)
 
-        local trait = CharacterTrait.register(ZModUnbork.fix_id(id))
+        local trait = ZModUnbork.RegCache.find_or_create( Registries.CHARACTER_TRAIT, id )
+        if not trait then
+            ZModUnbork.warn_once("TraitFactory.addTrait(%S) => nil", id)
+            return nil
+        end
         return CharacterTraitDefinition.addCharacterTraitDefinition(trait, name, price, description, is_profession)
     end,
 

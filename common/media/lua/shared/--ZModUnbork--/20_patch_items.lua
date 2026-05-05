@@ -55,20 +55,23 @@ local function findAmmoType(typeName)
         end
         if result then break end
 
-        local prefix = "ZModUnbork"
-        if luautils.stringStarts(underscore, "base:") then
-            underscore = prefix:lower() .. underscore:sub(5)
-        elseif not underscore:find(":") then
-            underscore = prefix:lower() .. ":" .. underscore
+        if not registry.registerBase then -- enabled by ZBExhume41 mod
+            local prefix = "ZModUnbork"
+            if luautils.stringStarts(underscore, "base:") then
+                underscore = prefix:lower() .. underscore:sub(5)
+            elseif not underscore:find(":") then
+                underscore = prefix:lower() .. ":" .. underscore
+            end
+            -- keep "Base." prefix because items are defined in item scripts with "Base." prefix
+            --
+            -- if luautils.stringStarts(camelCase,  "Base.") then
+            --     camelCase = prefix .. camelCase:sub(5)
+            -- elseif not camelCase:find("%.") then
+            --     camelCase = prefix .. "." .. camelCase
+            -- end
         end
 
-        if luautils.stringStarts(camelCase,  "Base.") then
-            camelCase = prefix .. camelCase:sub(5)
-        elseif not camelCase:find("%.") then
-            camelCase = prefix .. "." .. camelCase
-        end
-
-        result = ZModUnbork.RegCache.convert_id(registry, underscore, camelCase)
+        result = ZModUnbork.RegCache.find_or_create(registry, underscore, camelCase)
         break
     end
 

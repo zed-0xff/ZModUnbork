@@ -9,14 +9,13 @@ ProfessionFactory = {
     -- 42.12 ProfessionFactory.addProfession()
     -- 42.13 CharacterProfession.register() + CharacterProfessionDefinition.addCharacterProfessionDefinition()
     addProfession = function(id, name, description, cost)
-        ZModUnbork.log_once("ProfessionFactory.addProfession('%s', ...)", id)
+        ZModUnbork.log_once("ProfessionFactory.addProfession(%S, ...)", id)
 
-        local profType = (
-            CharacterProfession.get(ResourceLocation.of(id)) or
-            CharacterProfession.get(ResourceLocation.of(ZModUnbork.fix_id(id))) or
-            CharacterProfession.register(ZModUnbork.fix_id(id))
-        )
-
+        local profType = ZModUnbork.RegCache.find_or_create( Registries.CHARACTER_PROFESSION, id )
+        if not profType then
+            ZModUnbork.warn_once("ProfessionFactory.addProfession(%S) => nil", id)
+            return nil
+        end
         local iconPathName = nil
 
         local result = (

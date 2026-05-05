@@ -1,8 +1,8 @@
 ZModUnbork = ZModUnbork or {}
 
 ZModUnbork.MOD_ID         = "ZModUnbork"
-ZModUnbork.DEFAULT_PREFIX = "ZModUnbork"
-ZModUnbork.logger         = zdk.Logger.new("ZModUnbork")
+ZModUnbork.DEFAULT_PREFIX = ZModUnbork.MOD_ID
+ZModUnbork.logger         = zdk.Logger.new(ZModUnbork.MOD_ID)
 
 local logger = ZModUnbork.logger
 
@@ -28,24 +28,6 @@ function ZModUnbork.fix_id(id)
     if id:contains(":") then return id end
     return ZModUnbork.DEFAULT_PREFIX .. ":" .. id
 end
-
---local _prefix_cache = {}
---local function origin2prefix(origin)
---    if not origin or not origin.fname then return DEFAULT_PREFIX end
---
---    if _prefix_cache[origin.fname] then
---        return _prefix_cache[origin.fname]
---    end
---
---    local prefix  = DEFAULT_PREFIX
---    local modInfo = zdk.fname2mod(origin.fname)
---    if modInfo then
---        prefix = modInfo:getId():gsub("\\", "") -- remove heading slash from pre-42.15 mod ids
---    end
---
---    _prefix_cache[origin.fname] = prefix
---    return prefix
---end
 
 local _logged_origins = {}
 local function log(level, fmt, ...)

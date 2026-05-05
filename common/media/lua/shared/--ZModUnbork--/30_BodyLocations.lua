@@ -8,11 +8,11 @@
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.13")) then return end
 
 local logger = ZModUnbork.logger
-local _locations_registry = ZModUnbork.RegCache.get(Registries.ITEM_BODY_LOCATION)
+local _locations_cache = ZModUnbork.RegCache.get_cache(Registries.ITEM_BODY_LOCATION)
 
 local function convert_id(id, fmt, ...)
     if fmt then ZModUnbork.log_once(fmt, ...) end
-    return ZModUnbork.RegCache.convert_id(Registries.ITEM_BODY_LOCATION, id)
+    return ZModUnbork.RegCache.find_or_create(Registries.ITEM_BODY_LOCATION, id)
 end
 
 zdk.hook({
@@ -103,7 +103,7 @@ local function checkItem(item, phase)
     local scriptTbl = zdk.parse_item_script(item)
     if not scriptTbl or not scriptTbl.bodylocation then return end
 
-    local newLoc = _locations_registry[scriptTbl.bodylocation:lower()]
+    local newLoc = _locations_cache[scriptTbl.bodylocation:lower()]
     if newLoc then
         logger:info("set %-13s to %-35s for %s", "bodyLocation", newLoc, item:getFullName())
         item:setBodyLocation(newLoc)
@@ -127,8 +127,8 @@ local function patchClothingSelectionDefinitions()
     for sex,def in pairs(ClothingSelectionDefinitions.default) do
         local keys = tableKeys(def)
         for _, key in ipairs(keys) do
-            if _locations_registry[key:lower()] then
-                def[_locations_registry[key:lower()]:toString()] = def[key]
+            if _locations_cache[key:lower()] then
+                def[_locations_cache[key:lower()]:toString()] = def[key]
                 def[key] = nil
             end
         end

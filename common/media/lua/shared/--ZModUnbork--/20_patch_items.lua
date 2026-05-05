@@ -71,7 +71,15 @@ local function findAmmoType(typeName)
             -- end
         end
 
-        result = ZModUnbork.RegCache.find_or_create(registry, underscore, camelCase)
+        local registerArgs     = { camelCase }
+        local registerBaseArgs = false -- don't call registerBase() if ItemKey cannot be resolved
+        local itemKey = ItemKey and ItemKey.getByItemKeyValue and ItemKey.getByItemKeyValue(camelCase)
+        if itemKey then
+            registerBaseArgs = { itemKey }
+        else
+            ZModUnbork.warn_once("findAmmoType: ItemKey not found for %S", camelCase)
+        end
+        result = ZModUnbork.RegCache.find_or_create(registry, underscore, registerArgs, registerBaseArgs)
         break
     end
 

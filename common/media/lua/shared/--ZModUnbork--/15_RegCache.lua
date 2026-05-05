@@ -77,7 +77,12 @@ function ZModUnbork.RegCache.find(registry, id)
 end
 
 -- convert String id to registry id, register if not exists, and cache for future use
-function ZModUnbork.RegCache.find_or_create(registry, id, ...)
+-- registerArgs     is passed as extra args to register()
+-- registerBaseArgs is passed as extra args to registerBase()
+
+-- if registerBaseArgs is nil then it is copied from registerArgs
+-- if registerBaseArgs is false then registerBase() is not called (use for AmmoType when ItemKey cannot be resolved)
+function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, registerBaseArgs)
     if not registry or type(id) ~= "string" then
         logger:error("RegCache.find_or_create: invalid arguments, registry=%S, id=%S", registry, id)
         return nil
@@ -95,6 +100,17 @@ function ZModUnbork.RegCache.find_or_create(registry, id, ...)
 
     while not needle do
         -- find failed, try to register
+        registerArgs = registerArgs or {}
+        if type(registerArgs) ~= "table" then
+            logger:error("RegCache.find_or_create: invalid registerArgs=%S", registerArgs)
+            return nil
+        end
+        if registerBaseArgs == nil then
+            registerBaseArgs = registerArgs
+        elseif registerBaseArgs ~= false and type(registerBaseArgs) ~= "table" then
+            logger:error("RegCache.find_or_create: invalid registerBaseArgs=%S", registerBaseArgs)
+            return nil
+        end
 
         -- strip mistyped "base." prefix
         if id:sub(1,5):lower() == "base." then
@@ -104,8 +120,8 @@ function ZModUnbork.RegCache.find_or_create(registry, id, ...)
         end
 
         -- enabled by ZBExhume41 mod
-        if regClass.registerBase then
-            needle = regClass.registerBase(id, ...)
+        if regClass.registerBase and registerBaseArgs ~= false then
+            needle = regClass.registerBase(id, unpack(registerBaseArgs))
             if needle then break end
         end
 
@@ -116,7 +132,7 @@ function ZModUnbork.RegCache.find_or_create(registry, id, ...)
             id = id2
         end
 
-        needle = regClass.register(ZModUnbork.fix_id(id), ...)
+        needle = regClass.register(ZModUnbork.fix_id(id), unpack(registerArgs))
         break
     end
 

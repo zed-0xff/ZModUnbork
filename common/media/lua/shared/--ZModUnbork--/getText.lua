@@ -29,20 +29,20 @@ local function process_line(line)
     local eq_pos = line:find("=")
     if not eq_pos then return end
 
-    local key   = line:sub(0, eq_pos - 1):trim()
+    local key   = line:sub(1, eq_pos - 1):trim()
     local value = line:sub(eq_pos + 1):trim()
     if not key or not value or key == "" or value == "" then return end
     if value == "{" then return end -- very first file line is "IGUI_ = {"
 
     if luautils.stringEnds(value, ",") then
-        value = value:sub(0, -2):trim()
+        value = value:sub(1, -2):trim()
     end
 
     if luautils.stringStarts(value, '"') then
         value = value:sub(2)
     end
     if luautils.stringEnds(value, '"') then
-        value = value:sub(0, -2)
+        value = value:sub(1, -2)
     end
 
     _cache[key] = value

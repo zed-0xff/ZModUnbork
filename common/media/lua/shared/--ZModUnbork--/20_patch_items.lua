@@ -42,7 +42,7 @@ local function findAmmoType(typeName)
             camelCase  = ZModUnbork.underscore_to_camel(typeName)
         end
 
-        result = registry:get(ResourceLocation.of(underscore)) or registry:get(ResourceLocation.of(ZModUnbork.fix_id(underscore)))
+        result = ZModUnbork.RegCache.find(registry, underscore)
         if result then break end
 
         local values = registry:values()

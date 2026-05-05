@@ -44,7 +44,7 @@ zdk.augment_metatable( CharacterProfessionDefinition.class, {
     -- 42.12: void addFreeTrait(string)
     -- 42.13: void addGrantedTrait(CharacterTrait)
     addFreeTrait = function(self, id)
-        local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+        local trait = ZModUnbork.RegCache.find(Registries.CHARACTER_TRAIT, id)
         ZModUnbork.log_once("Profession.addFreeTrait('%s') => %s", id, trait)
         self:addGrantedTrait(trait)
     end,

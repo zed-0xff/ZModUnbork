@@ -6,6 +6,10 @@
 -- TraitFactory was removed in 42.13
 if TraitFactory then return end
 
+local function trait_from_string_id(id)
+    return (ZModUnbork.RegCache.find(Registries.CHARACTER_TRAIT, id))
+end
+
 TraitFactory = {
     -- 42.12:
     --   public static Trait addTrait(String id, String name, int cost, String descr, boolean prof)
@@ -24,8 +28,8 @@ TraitFactory = {
     end,
 
     setMutualExclusive = function(id1, id2)
-        local trait1 = CharacterTrait.get(ResourceLocation.of(id1)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id1)))
-        local trait2 = CharacterTrait.get(ResourceLocation.of(id2)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id2)))
+        local trait1 = trait_from_string_id(id1)
+        local trait2 = trait_from_string_id(id2)
         if trait1 and trait2 then
             ZModUnbork.log_once("TraitFactory.setMutualExclusive('%s', '%s')", id1, id2)
             CharacterTraitDefinition.setMutualExclusive(trait1, trait2)
@@ -46,7 +50,7 @@ zdk.augment_metatable( CharacterTraitDefinition.class, {
     -- 42.12: void addFreeTrait(string)
     -- 42.13: void addGrantedTrait(CharacterTrait)
     addFreeTrait = function(self, id)
-        local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+        local trait = trait_from_string_id(id)
         ZModUnbork.log_once("Trait.addFreeTrait('%s') => addGrantedTrait(%s)", id, trait)
         self:addGrantedTrait(trait)
     end,
@@ -62,7 +66,7 @@ zdk.hook({
     [CharacterTraits.class] = {
         add = function(orig, self, id, ...)
             if type(id) == "string" then
-                local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+                local trait = trait_from_string_id(id)
                 ZModUnbork.log_once("CharacterTraits.add(%s) => %s", id, trait)
                 id = trait
             end
@@ -71,7 +75,7 @@ zdk.hook({
 
         remove = function(orig, self, id, ...)
             if type(id) == "string" then
-                local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+                local trait = trait_from_string_id(id)
                 ZModUnbork.log_once("CharacterTraits.remove(%s) => %s", id, trait)
                 id = trait
             end
@@ -95,7 +99,7 @@ ZModUnbork.patch_method_alias(CharacterTraitDefinition.class, "getXPBoostMap", "
 local function patchedHasTrait(self, id)
     local trait = nil
     if type(id) == "string" then
-        trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+        trait = trait_from_string_id(id)
     else
         -- CharacterTrait object?
         trait = id
@@ -120,7 +124,7 @@ zdk.augment_all_metatables("hasTrait", {
 zdk.patch_all_metatables('hasTrait', {
     hasTrait = function(orig, self, id, ...)
         if type(id) == "string" then
-            local trait = CharacterTrait.get(ResourceLocation.of(id)) or CharacterTrait.get(ResourceLocation.of(ZModUnbork.fix_id(id)))
+            local trait = trait_from_string_id(id)
             ZModUnbork.log_once("hasTrait(%s) => %s", id, trait)
             id = trait
         end

@@ -1,8 +1,8 @@
 ZModUnbork = ZModUnbork or {}
 
-ZModUnbork.MOD_ID         = "ZModUnbork"
-ZModUnbork.DEFAULT_PREFIX = ZModUnbork.MOD_ID
-ZModUnbork.logger         = zdk.Logger.new(ZModUnbork.MOD_ID)
+ZModUnbork.MOD_DISPLAY_NAME = "Zed's Universal Mod Unbork"
+ZModUnbork.DEFAULT_PREFIX   = ZModUnbork.MOD_ID
+ZModUnbork.logger           = zdk.Logger.new(ZModUnbork.MOD_ID, ZModUnbork.Config.get("verbose_logs") and zdk.Logger.DEBUG or zdk.Logger.INFO)
 
 local logger = ZModUnbork.logger
 

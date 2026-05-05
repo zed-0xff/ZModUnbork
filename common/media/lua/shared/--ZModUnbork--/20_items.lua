@@ -109,9 +109,9 @@ local function checkItem(item)
 
     _maxTypeLen = math.max(_maxTypeLen, string.len(tostring(newType)))
     if curType then
-        logger:info("change itemType from %-*s to %-*s for %s", _maxTypeLen, curType, _maxTypeLen, newType, item:getFullName())
+        ZModUnbork.clog("ItemType", "change itemType from %-*s to %-*s for %s", _maxTypeLen, curType, _maxTypeLen, newType, item:getFullName())
     else
-        logger:info("set itemType to %-*s for %s", _maxTypeLen, newType, item:getFullName())
+        ZModUnbork.clog("ItemType", "set itemType to %-*s for %s", _maxTypeLen, newType, item:getFullName())
     end
     item:setItemType(newType)
 
@@ -120,7 +120,7 @@ local function checkItem(item)
         if ammoType then
             _maxTypeLen = math.max(_maxTypeLen, string.len(tostring(ammoType)))
             item:setAmmoType(ammoType)
-            logger:info("set ammoType to %-*s for %s", _maxTypeLen, ammoType, item:getFullName())
+            ZModUnbork.clog('AmmoType', "set ammoType to %-*s for %s", _maxTypeLen, ammoType, item:getFullName())
         else
             logger:warn("invalid ammoType %S for %s", scriptTbl.ammotype, item:getFullName())
         end
@@ -138,7 +138,7 @@ local function patchItemTypes()
                 -- 41.78: TeachedRecipes
                 -- 42.12: LearnedRecipes
                 if scriptTbl and scriptTbl.teachedrecipes then
-                    logger:info("set LearnedRecipes to %S for %s", scriptTbl.teachedrecipes, item:getFullName())
+                    ZModUnbork.clog("LearnedRecipes", "set LearnedRecipes to %S for %s", scriptTbl.teachedrecipes, item:getFullName())
                     item:DoParam("LearnedRecipes", scriptTbl.teachedrecipes)
                 end
             end

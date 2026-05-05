@@ -78,7 +78,7 @@ local function fixSnapshot(snapshot, body)
                     local partIndex = covered[j]
                     if partIndex and partIndex >= 0 and partIndex < maxParts then
                         if not snapshot[partIndex] then
-                            ZModUnbork.log_once("snapshotBodyPartWetness: setting snapshot[%d] to %f from %s", partIndex, clothing:getWetness(), clothing)
+                            ZModUnbork.clog_once('simulationWetness', "snapshotBodyPartWetness: setting snapshot[%d] to %f from %s", partIndex, clothing:getWetness(), clothing)
                             snapshot[partIndex] = clothing:getWetness()
                         end
                     end
@@ -104,7 +104,7 @@ zdk.hook({
                         end
                     }
                 })
-                ZModUnbork.logger:info("%s hook result: %s", HOOKED_REQUIRE, hook_res)
+                ZModUnbork.clog('simulationWetness', "%s hook result: %s", HOOKED_REQUIRE, hook_res)
             end
             return result
         end

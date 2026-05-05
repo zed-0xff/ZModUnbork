@@ -19,7 +19,7 @@ local aliases = {
 
 for k,v in pairs(aliases) do
     if ProceduralDistributions.list[v] and not ProceduralDistributions.list[k] then
-        ZModUnbork.logger:info("ProceduralDistributions: aliasing '%s' to '%s'", k, v)
+        ZModUnbork.clog('distributions', "ProceduralDistributions: aliasing '%s' to '%s'", k, v)
         ProceduralDistributions.list[k] = ProceduralDistributions.list[v]
     end
 end

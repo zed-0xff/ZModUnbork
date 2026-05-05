@@ -12,7 +12,7 @@ zdk.patch_all_metatables("getAmmoType", {
 
         if instanceof(result, "AmmoType") and zdk.get_call_origin_mod_id(ZModUnbork.MOD_ID) == ARSENAL_MOD_ID and result.getItemKey then
             local strValue = result:getItemKey()
-            ZModUnbork.log_once("converting AmmoType %s to string %S", result, strValue)
+            ZModUnbork.clog_once('AmmoType', "converting AmmoType %s to string %S", result, strValue)
             return strValue
         end
 
@@ -23,7 +23,7 @@ zdk.patch_all_metatables("getAmmoType", {
 local function patched_getItemCount(orig, self, itemType, ...)
     if instanceof(itemType, "AmmoType") and itemType.getItemKey then
         local strValue = itemType:getItemKey()
-        ZModUnbork.log_once("converting AmmoType %s to string %S", itemType, strValue)
+        ZModUnbork.clog_once('AmmoType', "converting AmmoType %s to string %S", itemType, strValue)
         itemType = strValue
     end
     return orig(self, itemType, ...)
@@ -47,7 +47,7 @@ zdk.patch_all_metatables("getWeaponReloadType", {
 
         if instanceof(result, "WeaponReloadType") and zdk.get_call_origin_mod_id(ZModUnbork.MOD_ID) == ARSENAL_MOD_ID then
             local strValue = result:toString()
-            ZModUnbork.log_once("converting WeaponReloadType %s to string %S", result, strValue)
+            ZModUnbork.clog_once('WeaponReloadType', "converting WeaponReloadType %s to string %S", result, strValue)
             return strValue
         end
 
@@ -60,12 +60,12 @@ zdk.patch_all_metatables("setAnimVariable", {
     setAnimVariable = function(orig, self, key, val, ...)
         if instanceof(key, "WeaponReloadType") then
             local strValue = key:toString()
-            ZModUnbork.log_once("converting WeaponReloadType %s to string %S", key, strValue)
+            ZModUnbork.clog_once('WeaponReloadType', "converting WeaponReloadType %s to string %S", key, strValue)
             key = strValue
         end
         if instanceof(val, "WeaponReloadType") then
             local strValue = val:toString()
-            ZModUnbork.log_once("converting WeaponReloadType %s to string %S", val, strValue)
+            ZModUnbork.clog_once('WeaponReloadType', "converting WeaponReloadType %s to string %S", val, strValue)
             val = strValue
         end
 

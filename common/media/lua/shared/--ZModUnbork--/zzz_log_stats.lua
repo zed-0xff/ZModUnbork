@@ -1,0 +1,9 @@
+--local function log_stats_afterAll()
+--    ZModUnbork.logStats()
+--end
+--
+--local function log_stats_beforeAll()
+--    Events.OnGameBoot.Add(log_stats_afterAll)
+--end
+--
+--Events.OnGameBoot.Add(log_stats_beforeAll)

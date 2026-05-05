@@ -54,7 +54,7 @@ local function patchedHasTag(orig, self, ...)
         end
 
         local result = cachedTags[tagName:lower()] or false
-        ZModUnbork.log_once("%s:hasTag(%S) => %s", fullType, tagName, result)
+        ZModUnbork.clog_once('tags', "%s:hasTag(%S) => %s", fullType, tagName, result)
         return result
     end
 

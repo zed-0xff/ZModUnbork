@@ -79,7 +79,9 @@ local function init_cache()
         process_file(mod_id, "media/lua/shared/Translate/EN/UI_EN.txt")
     end
 
-    ZModUnbork.logger:info("Loaded %d translations from %d files", _nlines, _nfiles)
+    ZModUnbork.logger:debug("Loaded %d translations from %d files", _nlines, _nfiles)
+    ZModUnbork.stats.translation_lines = _nlines
+    ZModUnbork.stats.translation_files = _nfiles
 end
 
 local function try_translate(key)
@@ -90,7 +92,7 @@ local function try_translate(key)
 
     local translated = _cache[key]
     if translated then
-        ZModUnbork.logger:info_once('translated "%s" -> "%s"', key, translated)
+        ZModUnbork.clog_once('getText', 'translated "%s" -> "%s"', key, translated)
         return translated
     end
     return key
@@ -128,7 +130,7 @@ local function checkItem(item)
     local actual_tooltip = _cache[tooltip]
     if not actual_tooltip then return end
 
-    ZModUnbork.logger:info("fixing tooltip for %s", item:getFullName())
+    ZModUnbork.clog("tooltips", "fixing tooltip for %s", item:getFullName())
     item:DoParam("Tooltip", tostring(actual_tooltip))
 end
 

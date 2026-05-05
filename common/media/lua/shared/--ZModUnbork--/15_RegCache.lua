@@ -115,7 +115,7 @@ function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, register
         -- strip mistyped "base." prefix
         if id:sub(1,5):lower() == "base." then
             local id2 = id:sub(6)
-            ZModUnbork.log_once("RegCache.find_or_create: %S -> %S", id, id2)
+            ZModUnbork.clog_once('fix_base', "RegCache.find_or_create: %S -> %S", id, id2)
             id = id2
         end
 
@@ -128,7 +128,7 @@ function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, register
         -- registerBase is not available, and register() will fail if id has "base:" prefix
         if id:sub(1,5):lower() == "base:" then
             local id2 = id:sub(6)
-            ZModUnbork.log_once("RegCache.find_or_create: %S -> %S", id, id2)
+            ZModUnbork.clog_once('fix_base', "RegCache.find_or_create: %S -> %S", id, id2)
             id = id2
         end
 

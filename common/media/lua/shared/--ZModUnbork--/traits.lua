@@ -17,7 +17,7 @@ TraitFactory = {
     --
     -- 42.13 CharacterTrait.register() + CharacterTraitDefinition.addCharacterTraitDefinition()
     addTrait = function(id, name, price, description, is_profession)
-        ZModUnbork.log_once("TraitFactory.addTrait(%S, ...)", id)
+        ZModUnbork.clog_once('traits', "TraitFactory.addTrait(%S, ...)", id)
 
         local trait = ZModUnbork.RegCache.find_or_create( Registries.CHARACTER_TRAIT, id )
         if not trait then
@@ -31,7 +31,7 @@ TraitFactory = {
         local trait1 = trait_from_string_id(id1)
         local trait2 = trait_from_string_id(id2)
         if trait1 and trait2 then
-            ZModUnbork.log_once("TraitFactory.setMutualExclusive('%s', '%s')", id1, id2)
+            ZModUnbork.clog_once('traits', "TraitFactory.setMutualExclusive('%s', '%s')", id1, id2)
             CharacterTraitDefinition.setMutualExclusive(trait1, trait2)
         else
             ZModUnbork.warn_once("TraitFactory.setMutualExclusive: invalid traits '%s' or '%s'", id1, id2)
@@ -39,7 +39,7 @@ TraitFactory = {
     end,
 
     getTraits = function()
-        ZModUnbork.log_once("TraitFactory.getTraits()")
+        ZModUnbork.clog_once('traits', "TraitFactory.getTraits()")
         return CharacterTraitDefinition.getTraits()
     end,
 }
@@ -51,7 +51,7 @@ zdk.augment_metatable( CharacterTraitDefinition.class, {
     -- 42.13: void addGrantedTrait(CharacterTrait)
     addFreeTrait = function(self, id)
         local trait = trait_from_string_id(id)
-        ZModUnbork.log_once("Trait.addFreeTrait('%s') => addGrantedTrait(%s)", id, trait)
+        ZModUnbork.clog_once('traits', "Trait.addFreeTrait('%s') => addGrantedTrait(%s)", id, trait)
         self:addGrantedTrait(trait)
     end,
 
@@ -67,7 +67,7 @@ zdk.hook({
         add = function(orig, self, id, ...)
             if type(id) == "string" then
                 local trait = trait_from_string_id(id)
-                ZModUnbork.log_once("CharacterTraits.add(%s) => %s", id, trait)
+                ZModUnbork.clog_once('traits', "CharacterTraits.add(%s) => %s", id, trait)
                 id = trait
             end
             return orig(self, id, ...)
@@ -76,7 +76,7 @@ zdk.hook({
         remove = function(orig, self, id, ...)
             if type(id) == "string" then
                 local trait = trait_from_string_id(id)
-                ZModUnbork.log_once("CharacterTraits.remove(%s) => %s", id, trait)
+                ZModUnbork.clog_once('traits', "CharacterTraits.remove(%s) => %s", id, trait)
                 id = trait
             end
             return orig(self, id, ...)
@@ -111,7 +111,7 @@ local function patchedHasTrait(self, id)
     end
 
     local result = self:hasTrait(trait)
-    ZModUnbork.log_once("IsoGameCharacter.HasTrait(%s) => %s", id, result)
+    ZModUnbork.clog_once('traits', "IsoGameCharacter.HasTrait(%s) => %s", id, result)
     return result
 end
 
@@ -125,7 +125,7 @@ zdk.patch_all_metatables('hasTrait', {
     hasTrait = function(orig, self, id, ...)
         if type(id) == "string" then
             local trait = trait_from_string_id(id)
-            ZModUnbork.log_once("hasTrait(%s) => %s", id, trait)
+            ZModUnbork.clog_once('traits', "hasTrait(%s) => %s", id, trait)
             id = trait
         end
         return orig(self, id, ...)

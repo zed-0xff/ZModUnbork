@@ -25,7 +25,7 @@
 --       }
 --       ...
 
-local logger = zdk.Logger.new("ZModUnbork")
+local logger = ZModUnbork.logger
 
 -- sanity check
 if not ItemType or not ItemType.CLOTHING then
@@ -42,7 +42,7 @@ local function checkItem(item)
 
     if zdk.parse_item_script(item)["canbeequipped"] then return end -- already fixed, skip
 
-    logger:info("set %-13s to %-35s for %s", "canBeEquipped", bodyLoc, item:getFullName())
+    ZModUnbork.clog('BodyLocations', "set %-13s to %-35s for %s", "canBeEquipped", bodyLoc, item:getFullName())
     item:DoParam("canBeEquipped", tostring(bodyLoc))
 end
 

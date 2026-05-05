@@ -4,7 +4,7 @@ if not getActivatedMods():contains("PROJECTRVInterior42") then return end
 local rvf = nil
 
 function ZModUnbork.playerInsideInterior(player)
-    ZModUnbork.log_once("RVInterior.playerInsideInterior()")
+    ZModUnbork.clog_once('playerInsideInterior', "RVInterior.playerInsideInterior()")
     if CheckIfInRV then
         -- MP
         return CheckIfInRV(player)

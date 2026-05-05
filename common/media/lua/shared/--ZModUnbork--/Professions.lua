@@ -9,7 +9,7 @@ ProfessionFactory = {
     -- 42.12 ProfessionFactory.addProfession()
     -- 42.13 CharacterProfession.register() + CharacterProfessionDefinition.addCharacterProfessionDefinition()
     addProfession = function(id, name, description, cost)
-        ZModUnbork.log_once("ProfessionFactory.addProfession(%S, ...)", id)
+        ZModUnbork.clog_once('professions', "ProfessionFactory.addProfession(%S, ...)", id)
 
         local profType = ZModUnbork.RegCache.find_or_create( Registries.CHARACTER_PROFESSION, id )
         if not profType then
@@ -28,12 +28,12 @@ ProfessionFactory = {
     -- 42.12 ProfessionFactory.getProfessions()
     -- 42.13 CharacterProfessionDefinition.getProfessions()
     getProfessions = function()
-        ZModUnbork.log_once("ProfessionFactory.getProfessions()")
+        ZModUnbork.clog_once('professions', "ProfessionFactory.getProfessions()")
         return CharacterProfessionDefinition.getProfessions()
     end,
 
     Reset = function()
-        ZModUnbork.log_once("ProfessionFactory.Reset()")
+        ZModUnbork.clog_once('professions', "ProfessionFactory.Reset()")
         -- no-op, but required for compatibility with 42.12
     end,
 }
@@ -45,7 +45,7 @@ zdk.augment_metatable( CharacterProfessionDefinition.class, {
     -- 42.13: void addGrantedTrait(CharacterTrait)
     addFreeTrait = function(self, id)
         local trait = ZModUnbork.RegCache.find(Registries.CHARACTER_TRAIT, id)
-        ZModUnbork.log_once("Profession.addFreeTrait('%s') => %s", id, trait)
+        ZModUnbork.clog_once('professions', "Profession.addFreeTrait('%s') => %s", id, trait)
         self:addGrantedTrait(trait)
     end,
 })
@@ -62,7 +62,7 @@ zdk.augment_metatable( SurvivorDesc.class, {
     -- 42.12: public string getProfession()
     -- 42.13: public CharacterProfession getCharacterProfession()
     getProfession = function(self)
-        ZModUnbork.log_once("SurvivorDesc.getProfession()")
+        ZModUnbork.clog_once('professions', "SurvivorDesc.getProfession()")
         return self:getCharacterProfession():getName()
     end,
 })
@@ -72,7 +72,7 @@ zdk.augment_metatable( SurvivorDesc.class, {
 if doMetalWorkerRecipes then return end
 
 function doMetalWorkerRecipes(metalworker)
-    ZModUnbork.log_once("doMetalWorkerRecipes(%s)", metalworker.getLabel and metalworker:getLabel() or tostring(metalworker))
+    ZModUnbork.clog_once('professions', "doMetalWorkerRecipes(%s)", metalworker.getLabel and metalworker:getLabel() or tostring(metalworker))
 
     local recipes = CharacterProfessionDefinition.getCharacterProfessionDefinition(CharacterProfession.METALWORKER):getGrantedRecipes()
     for i = 0, recipes:size() - 1 do

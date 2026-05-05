@@ -32,10 +32,10 @@ zdk.hook({
                         logger:error("BodyLocationGroup.list.add(%d, %s) called with unexpected argument type %s", index, locationObj, type(locationObj))
                         return
                     end
-                    logger:info("BodyLocationGroup.list.add(%d, %s) => group:moveLocationToIndex(%s, %d)", index, locationObj, id, index)
+                    ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.add(%d, %s) => group:moveLocationToIndex(%s, %d)", index, locationObj, id, index)
                     ZModUnbork.last_group:moveLocationToIndex(id, index) -- expects ItemBodyLocation, int
                 else
-                    logger:info("BodyLocationGroup.list.add(%d, %s) called on unmodifiable list, ignored", index, locationObj)
+                    ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.add(%d, %s) called on unmodifiable list, ignored", index, locationObj)
                 end
             elseif not locationObj then
                 -- add(obj)
@@ -49,7 +49,7 @@ zdk.hook({
                     logger:error("BodyLocationGroup.list.add(%s) called with unexpected argument type %s", locationObj, type(locationObj))
                     return
                 end
-                logger:info("BodyLocationGroup.list.add(%s) => group:getOrCreateLocation(%s)", locationObj, id)
+                ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.add(%s) => group:getOrCreateLocation(%s)", locationObj, id)
                 ZModUnbork.last_group:getOrCreateLocation(id) -- expects ItemBodyLocation
             else
                 -- ??
@@ -59,7 +59,7 @@ zdk.hook({
 
         remove = function(orig, self, locationObj, ...)
             _lastRemove = locationObj
-            logger:info("BodyLocationGroup.list.remove(%s) called on unmodifiable list, ignored", locationObj)
+            ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.remove(%s) called on unmodifiable list, ignored", locationObj)
         end,
     },
 })
@@ -70,7 +70,7 @@ if isDebugEnabled() then return end
 zdk.hook({
     _G = {
         getClassField = function(orig, obj, fieldIdx, ...)
-            ZModUnbork.log_once("getClassField(%s, %s)", getClassSimpleName(obj), fieldIdx)
+            ZModUnbork.clog_once('getClassFiel', "getClassField(%s, %s)", getClassSimpleName(obj), fieldIdx)
             local result = nil
 
             if instanceof(obj, "BodyLocationGroup") then
@@ -90,7 +90,7 @@ zdk.hook({
         end,
 
         getClassFieldVal = function(orig, obj, fieldObj, ...)
-            ZModUnbork.log_once("getClassFieldVal(%s, %s)", getClassSimpleName(obj), fieldObj)
+            ZModUnbork.clog_once('getClassFieldVal', "getClassFieldVal(%s, %s)", getClassSimpleName(obj), fieldObj)
             local result = nil
 
             if instanceof(obj, "BodyLocationGroup") then

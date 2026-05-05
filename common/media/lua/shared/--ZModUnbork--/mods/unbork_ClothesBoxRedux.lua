@@ -141,13 +141,13 @@ local function checkItem(item)
 
     -- check if scriptTbl.canbeequipped is 3-digit string
     if scriptTbl.canbeequipped:match("^%d%d%d$") then
-        logger:info("set CanBeEquipped to CBX:%s for %s", scriptTbl.canbeequipped, item:getFullName())
+        ZModUnbork.clog(MOD_ID, "set CanBeEquipped to CBX:%s for %s", scriptTbl.canbeequipped, item:getFullName())
         item:DoParam("CanBeEquipped", "CBX:" .. scriptTbl.canbeequipped)
     end
 end
 
 local function fix_ClothesBoxRedux()
-    logger:info("fixing %s mod", MOD_ID)
+    ZModUnbork.clog(MOD_ID, "fixing %s mod", MOD_ID)
 
     setupAuthenticZBodyLocations()
 

@@ -8,7 +8,7 @@
 -- reflection methods work in debug mode only since 42.15
 if getCore():getGameVersion():isLessThan(GameVersion.parse("42.15")) then return end
 
-local logger = zdk.Logger.new("ZModUnbork")
+local logger = ZModUnbork.logger
 
 local _lastLocs   = nil
 local _lastRemove = nil
@@ -70,7 +70,7 @@ if isDebugEnabled() then return end
 zdk.hook({
     _G = {
         getClassField = function(orig, obj, fieldIdx, ...)
-            ZModUnbork.clog_once('getClassFiel', "getClassField(%s, %s)", getClassSimpleName(obj), fieldIdx)
+            ZModUnbork.clog_once('getClassField', "getClassField(%s, %s)", getClassSimpleName(obj), fieldIdx)
             local result = nil
 
             if instanceof(obj, "BodyLocationGroup") then

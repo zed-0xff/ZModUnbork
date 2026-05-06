@@ -80,6 +80,7 @@ local function init_cache()
     end
 
     ZModUnbork.logger:debug("Loaded %d translations from %d files", _nlines, _nfiles)
+    ZModUnbork.stats = ZModUnbork.stats or {}
     ZModUnbork.stats.translation_lines = _nlines
     ZModUnbork.stats.translation_files = _nfiles
 end

@@ -23,41 +23,41 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
 
 [h1]Revived mods (work on 42.13+)[/h1]
 [list]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2893930681]Anthro Survivors (the "Furry Mod")[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2297098490]Arsenal GunFighter[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2335368829]Authentic Z - Lite[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2460154811]Brita's Armor Pack[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2200148440]Brita's Weapon Pack[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3069465403]Chocolate Pack[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2847911733]Clothes Box Redux[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3435985650]Combat Mastering Skill[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2286124931]Combat Text[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2459400130]Dynamic Traits[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3426711866]Fallout Food Mod B42[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3238978135]Furry Apocalypse (Anthro Zombies)[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3043243994]Hanabi's Food[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400448921]Handmade maps: Interactive Mapping[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] for java-side patches)
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3586145865]Improvised Backpack![/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3437429771]Injectors[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400782481]Item Comparison[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] (may be required by other B41 mods)
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3600401184]Realistic Temperature Mod[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3564838872]Rebalanced Yields: Butchering[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3390307636]Sanity B42[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2696120270]Simple Convert Vanilla to Brita[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3459638181]Small Town First Responders[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2684285534]Spongie's Clothing[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2812326159]Spongie's Open Jackets[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3508513470]Support Goods - MyComputer[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3479281883]Support Goods Bandits Integration[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3512993822]Support Goods Mega Mod[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3677147974]Support Goods MyRoom (MyPhoto)[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3540568094]The Lord of the Rings Posters[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387110070]They Knew[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3535295548]UNOFFICIAL Fools New Containers for B42[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3656879408]Zombie Infection Vaccine[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3268487204]Bandits[/url] + [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2459400130]Dynamic Traits[/url]
-   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3268487204]Bandits[/url] + [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3543229299]Project RV Interior[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2893930681]Anthro Survivors (the "Furry Mod")[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2297098490]Arsenal GunFighter[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2335368829]Authentic Z - Lite[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2460154811]Brita's Armor Pack[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2200148440]Brita's Weapon Pack[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3069465403]Chocolate Pack[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2847911733]Clothes Box Redux[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3435985650]Combat Mastering Skill[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2286124931]Combat Text[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2459400130]Dynamic Traits[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3426711866]Fallout Food Mod B42[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3238978135]Furry Apocalypse (Anthro Zombies)[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3043243994]Hanabi's Food[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400448921]Handmade maps: Interactive Mapping[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3619862853]ZombieBuddy[/url] for java-side patches)
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3586145865]Improvised Backpack![/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3437429771]Injectors[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3400782481]Item Comparison[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2169435993]Mod Options[/url] (may be required by other B41 mods)
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3600401184]Realistic Temperature Mod[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3564838872]Rebalanced Yields: Butchering[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3390307636]Sanity B42[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2696120270]Simple Convert Vanilla to Brita[/url] (with [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] for loading B41 mod on B42)
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3459638181]Small Town First Responders[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2684285534]Spongie's Clothing[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2812326159]Spongie's Open Jackets[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3508513470]Support Goods - MyComputer[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3479281883]Support Goods Bandits Integration[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3512993822]Support Goods Mega Mod[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3677147974]Support Goods MyRoom (MyPhoto)[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3540568094]The Lord of the Rings Posters[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3387110070]They Knew[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3535295548]UNOFFICIAL Fools New Containers for B42[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3656879408]Zombie Infection Vaccine[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3268487204]Bandits[/url] + [url=https://steamcommunity.com/sharedfiles/filedetails/?id=2459400130]Dynamic Traits[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3268487204]Bandits[/url] + [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3543229299]Project RV Interior[/url]
 [/list]
 
 [h1]Links[/h1]

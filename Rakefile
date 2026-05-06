@@ -66,10 +66,10 @@ task :info do
     if line =~ /^\[h1\]Revived mods/
       out_lines << "[list]\n"
       mods.each do |m|
-        out_lines << "   [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{m.id}]#{m.title}[/url]#{m.comment}\n"
+        out_lines << "    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{m.id}]#{m.title}[/url]#{m.comment}\n"
       end
       info['mod_pairs'].each do |pair|
-        out_lines << "   [*]" + pair.map{ |id, name| "[url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{id}]#{name}[/url]" }.join(" + ") + "\n"
+        out_lines << "    [*]" + pair.map{ |id, name| "[url=https://steamcommunity.com/sharedfiles/filedetails/?id=#{id}]#{name}[/url]" }.join(" + ") + "\n"
       end
       out_lines << "[/list]\n"
       out_lines << "\n"

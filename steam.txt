@@ -18,6 +18,7 @@ Load this mod [b]before[/b] or with mods that target older game versions to redu
 [olist]
 [*]zdk
 [*]Zed's Universal Mod Unbork
+[*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=3718604798]Exhume 41[/url] (optional, if you want to run B41 mods on B42)
 [*]all other mods that target older game versions
 [/olist]
 

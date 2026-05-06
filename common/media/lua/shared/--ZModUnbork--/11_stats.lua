@@ -25,13 +25,16 @@ function ZModUnbork.logStats()
     logger:info("stats / parameters fixed:")
     local keys = {}
     local maxKeyLen = 20
-    for key in pairs(ZModUnbork.stats) do
+    local maxValLen =  6
+    for key, value in pairs(ZModUnbork.stats) do
         table.insert(keys, key)
         if #key > maxKeyLen then maxKeyLen = #key end
+        local valLen = #tostring(value)
+        if valLen > maxValLen then maxValLen = valLen end
     end
     table.sort(keys)
     for _, key in ipairs(keys) do
-        logger:info("  %*s: %6d", maxKeyLen, key, ZModUnbork.stats[key])
+        logger:info("  %*s: %*d", maxKeyLen, key, maxValLen, ZModUnbork.stats[key])
     end
     if ZModUnbork.Config.get('verbose_logs') then
         logger:info("(disable verbose logs in ModOptions to see only summary counters)")

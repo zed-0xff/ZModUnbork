@@ -119,7 +119,7 @@ local function tableKeys(tbl)
 end
 
 -- ClothingSelectionDefinitions.default.Female = {
---   Legging -> "zmodunbork:leggging"
+--   Legging -> "zmodunbork:legging"
 -- }
 local function patchClothingSelectionDefinitions()
     if not ClothingSelectionDefinitions or not ClothingSelectionDefinitions.default then return end

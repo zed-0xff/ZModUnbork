@@ -9,19 +9,13 @@ end
 
 --- count or log
 function ZModUnbork.clog(key, fmt, ...)
-    if ZModUnbork.Config.get('verbose_logs') then
-        logger:info(fmt, ...)
-    else
-        ZModUnbork.increment_stat(key)
-    end
+    if ZModUnbork.Config.get('verbose_logs') then logger:info(fmt, ...) end
+    ZModUnbork.increment_stat(key)
 end
 
 function ZModUnbork.clog_once(key, fmt, ...)
-    if ZModUnbork.Config.get('verbose_logs') then
-        ZModUnbork.log_once(fmt, ...)
-    else
-        ZModUnbork.increment_stat(key)
-    end
+    if ZModUnbork.Config.get('verbose_logs') then ZModUnbork.log_once(fmt, ...) end
+    ZModUnbork.increment_stat(key)
 end
 
 function ZModUnbork.logStats()

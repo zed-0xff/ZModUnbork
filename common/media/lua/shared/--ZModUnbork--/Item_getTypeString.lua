@@ -26,6 +26,8 @@ zdk.augment_metatable(Item.class, {
     getTypeString = function(self)
         if not self.getItemType then return nil end
         local itemType = self:getItemType()
-        return MAP[itemType]
+        local result = MAP[itemType]
+        ZModUnbork.clog_once("ItemType.getTypeString", "ItemType.getTypeString(%s) => %S", self, result)
+        return result
     end
 })

@@ -30,11 +30,8 @@ function ZModUnbork.fix_id(id)
 end
 
 local _logged_origins = {}
-local function log(level, fmt, ...)
-    local origin = zdk.get_call_origin(ZModUnbork.MOD_ID)
-    if not origin then return end
-
-    local origin_str = origin.short_str or (tostring(origin.fname) .. (origin.line and (":" .. tostring(origin.line)) or ""))
+local function log(level, fmt, ...)                               -- XXX should not be called by functions which origin is ZModUnbork itself, e.g. Events.OnGameBoot and co
+    local origin_str = zdk.get_call_origin_str(ZModUnbork.MOD_ID)
     local log_key = origin_str .. "|" .. tostring(level)
     if _logged_origins[log_key] then return end
 

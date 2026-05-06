@@ -42,6 +42,7 @@ zdk.augment_metatable(Item.class, {
                 end
             end
         end
+        ZModUnbork.clog_once("Item.getCategories", "Item.getCategories(%s) => %S", self, result)
         return result
     end
 })
@@ -51,6 +52,8 @@ zdk.augment_metatable(Item.class, {
 --   42.12: -
 zdk.augment_metatable(HandWeapon.class, {
     getCategories = function(self)
-        return self:getScriptItem():getCategories()
+        local result = self:getScriptItem():getCategories()
+        ZModUnbork.clog_once("HandWeapon.getCategories", "HandWeapon.getCategories(%s) => %S", self, result)
+        return result
     end
 })

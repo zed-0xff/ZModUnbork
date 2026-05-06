@@ -13,13 +13,10 @@ zdk.hook({
             local result = orig(...)
             if result then return result end
 
-            local origin = zdk.get_call_origin(ZModUnbork.MOD_ID)
-            if origin and origin.mod and origin.mod.getId then
-                local id = origin.mod:getId()
-                if id == "DynamicTraits" or id == "Bandits2" then
-                    ZModUnbork.clog_once('fix_bandits', "IsoZombie.getMoodles()")
-                    return { getMoodleLevel = function() return 0 end }
-                end
+            local mod_id = zdk.get_call_origin_mod_id(ZModUnbork.MOD_ID)
+            if mod_id == "DynamicTraits" or mod_id == "Bandits2" then
+                ZModUnbork.clog_once('fix_bandits_moodle', "IsoZombie.getMoodles()")
+                return { getMoodleLevel = function() return 0 end }
             end
 
             return result

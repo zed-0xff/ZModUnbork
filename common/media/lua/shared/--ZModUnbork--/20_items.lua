@@ -9,23 +9,78 @@
 
 local logger = ZModUnbork.logger
 
-if not ItemType or not ItemType.NORMAL then
-    logger:warn("ItemType not found, skipping patch_itemtypes")
-    return
+if not ItemType or not ItemType.NORMAL then logger:warn("ItemType not found, skipping 20_items.lua"); return end
+if type(ItemKey) ~= "table" or not ItemKey.getByName or not ItemKey.new then logger:warn("ItemKey not found, skipping 20_items.lua"); return end
+
+local EMPTY_OPTIONAL = ItemKey.getByName("__empty" .. tostring(getRandomUUID()))
+local ITEMKEY_BASE_PREFIX = "Base."
+
+local function gatherBaseItemKeys()
+    local result = {}
+    for k, v in pairs(ItemKey) do
+        if type(v) == "table" then
+            for _, itemKey in pairs(v) do
+                if instanceof(itemKey, "ItemKey") and zdk.is_callable(itemKey.id) then
+                    local id = itemKey:id() -- "Axe"
+                    if type(id) == "string" then
+                        local fullId = luautils.stringStarts(id, ITEMKEY_BASE_PREFIX) and id or (ITEMKEY_BASE_PREFIX .. id) -- "Axe" -> "Base.Axe"
+                        result[fullId] = itemKey
+                    end
+                end
+            end
+        end
+    end
+    return result
 end
 
-local _cache = {}
+-- map of _vanilla_ item full types to ItemKey, e.g. "Base.Axe" => ItemKey for Base.Axe
+local baseItemKeys = gatherBaseItemKeys()
 
--- typeName:
+local function optional2str(opt)
+    if opt and opt ~= EMPTY_OPTIONAL then
+        return tostring(opt):gsub("Optional%[", ""):gsub("%]$", "")
+    else
+        return nil
+    end
+end
+
+-- XXX don't use ItemKey.getByItemKeyValue() because it matches by substring: ItemKey.getByItemKeyValue("WoodAxeForged") => "Base.Axe"
+-- ItemKey.new though OVERWRITES (!) the values in internal BY_NAME index
+local function getBaseItemKey(camelCase)
+    if type(camelCase) ~= "string" then logger:warn("getBaseItemKey: expected string, got %S", camelCase); return nil end
+    if not luautils.stringStarts(camelCase, ITEMKEY_BASE_PREFIX) then return nil end
+
+    local result = baseItemKeys[camelCase]
+    if result then return result end
+
+    -- non-vanilla item with "Base." prefix
+
+    local item = getItem(camelCase)
+    if item then return ItemKey.new(item:getName(), item:getItemType()) end
+
+    local name   = camelCase:sub(#ITEMKEY_BASE_PREFIX + 1) -- "Base.Axe" -> "Axe"
+    local optKey = ItemKey.getByName(name)                 -- Optional[Base.Axe], but Optional is not exposed to Lua :(
+    if not optKey or optKey == EMPTY_OPTIONAL then return nil end
+
+    item = getItem(optional2str(optKey))
+    if item then return ItemKey.new(item:getName(), item:getItemType()) end
+
+    logger:warn("getBaseItemKey: cannot resolve ItemKey for %S", camelCase)
+    return nil
+end
+
+-- typeName may be:
 --   "Base.ShotgunShells"
 --   "MagneticRound"
 --   "base:bullets_9mm"
+local _cache = {}
 local function findAmmoType(typeName)
     local cached = _cache[typeName]
     if cached then return cached end
 
     local registry = Registries.AMMO_TYPE
     local result   = nil
+    local regClass = nil
     while not result do
         local underscore, camelCase
         if typeName:find(":") then
@@ -42,44 +97,27 @@ local function findAmmoType(typeName)
             camelCase  = ZModUnbork.underscore_to_camel(typeName)
         end
 
-        result = ZModUnbork.RegCache.find(registry, underscore)
+        result, regClass = ZModUnbork.RegCache.find(registry, underscore)
         if result then break end
 
-        local values = registry:values()
-        for i=0,values:size()-1 do
-            local key = values:get(i):getItemKey()
-            if key == camelCase then
-                result = values:get(i)
-                break
-            end
-        end
-        if result then break end
-
-        if not registry.registerBase then -- enabled by ZBExhume41 mod
-            local prefix = "ZModUnbork"
-            if luautils.stringStarts(underscore, "base:") then
-                underscore = prefix:lower() .. underscore:sub(5)
-            elseif not underscore:find(":") then
-                underscore = prefix:lower() .. ":" .. underscore
-            end
-            -- keep "Base." prefix because items are defined in item scripts with "Base." prefix
-            --
-            -- if luautils.stringStarts(camelCase,  "Base.") then
-            --     camelCase = prefix .. camelCase:sub(5)
-            -- elseif not camelCase:find("%.") then
-            --     camelCase = prefix .. "." .. camelCase
-            -- end
+        -- XXX Ammotype != Registries.AMMO_TYPE
+        local id = optional2str(AmmoType.getByItemKey(camelCase)) -- AmmoType.getByItemKey("Base.Bullets9mm") => Optional[base:bullets_9mm] => "base:bullets_9mm"
+        if id then
+            result = registry:get(ResourceLocation.of(id))
+            if result then break end
         end
 
         local registerArgs     = { camelCase }
-        local registerBaseArgs = false -- don't call registerBase() if ItemKey cannot be resolved
-        local itemKey = ItemKey and ItemKey.getByItemKeyValue and ItemKey.getByItemKeyValue(camelCase)
-        if itemKey then
-            registerBaseArgs = { itemKey }
+        local registerBaseArgs = nil
+
+        local baseItemKey = getBaseItemKey(camelCase)
+        if baseItemKey then
+            registerBaseArgs = { baseItemKey }
         else
-            ZModUnbork.warn_once("findAmmoType: ItemKey not found for %S", camelCase)
+            registerBaseArgs = false -- don't call registerBase() if ItemKey cannot be resolved => it will create the item in 'ZModUnbork' namespace
         end
-        result = ZModUnbork.RegCache.find_or_create(registry, underscore, registerArgs, registerBaseArgs)
+
+        result = ZModUnbork.RegCache.create(registry, underscore, registerArgs, registerBaseArgs, regClass)
         break
     end
 
@@ -141,7 +179,7 @@ local function patchItemTypes()
                 -- 41.78: TeachedRecipes
                 -- 42.12: LearnedRecipes
                 if scriptTbl and scriptTbl.teachedrecipes then
-                    ZModUnbork.clog("LearnedRecipes", "set LearnedRecipes to %S for %s", scriptTbl.teachedrecipes, item:getFullName())
+                    ZModUnbork.clog('LearnedRecipes', "set LearnedRecipes to %S for %s", scriptTbl.teachedrecipes, item:getFullName())
                     item:DoParam("LearnedRecipes", scriptTbl.teachedrecipes)
                 end
             end

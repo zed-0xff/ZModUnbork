@@ -1,8 +1,11 @@
 -- mods unborked:
 --   RealisticClothes.3491510356
+--   (all B41 mods that use Type or getType)
 
 if Type then return end
 
+-- 41.78: Type
+-- 42.12: ItemType
 Type = {
     AlarmClock         = ItemType.ALARM_CLOCK,
     AlarmClockClothing = ItemType.ALARM_CLOCK_CLOTHING,

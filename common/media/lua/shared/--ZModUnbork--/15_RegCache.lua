@@ -76,12 +76,73 @@ function ZModUnbork.RegCache.find(registry, id)
     return nil, regClass
 end
 
--- convert String id to registry id, register if not exists, and cache for future use
--- registerArgs     is passed as extra args to register()
--- registerBaseArgs is passed as extra args to registerBase()
+local function class2str(x)
+    if type(x) == "table" and x.class then
+        -- getClassSimpleName(AmmoType)       => "KahluaTableImpl"
+        -- getClassSimpleName(AmmoType.class) => "Class"
+        -- tostring(AmmoType)                 => "table 0x1776177210"
+        -- tostring(AmmoType.class)           => "class zombie.scripting.objects.AmmoType"
+        local a = tostring(AmmoType.class):split("[.]")
+        return a[#a] -- "AmmoType"
+    else
+        return tostring(x)
+    end
+end
 
--- if registerBaseArgs is nil then it is copied from registerArgs
--- if registerBaseArgs is false then registerBase() is not called (use for AmmoType when ItemKey cannot be resolved)
+-- optional registerArgs     is passed as extra args to register()
+-- optional registerBaseArgs is passed as extra args to registerBase(), nil = copy from registerArgs, false = don't call registerBase()
+-- optional regClass         is passed from find_or_create() to avoid redundant registry lookup
+function ZModUnbork.RegCache.create(registry, id, registerArgs, registerBaseArgs, regClass)
+    if not registry or type(id) ~= "string" then
+        logger:error("RegCache.create: invalid arguments, registry=%S, id=%S", registry, id)
+        return nil
+    end
+
+    registerArgs = registerArgs or {}
+    if type(registerArgs) ~= "table" then
+        logger:error("RegCache.create: invalid registerArgs=%S", registerArgs)
+        return nil
+    end
+    if registerBaseArgs == nil then
+        registerBaseArgs = registerArgs
+    elseif registerBaseArgs ~= false and type(registerBaseArgs) ~= "table" then
+        logger:error("RegCache.create: invalid registerBaseArgs=%S", registerBaseArgs)
+        return nil
+    end
+
+    -- strip mistyped "base." prefix
+    if id:sub(1,5):lower() == "base." then
+        local id2 = id:sub(6)
+        ZModUnbork.clog_once('fix_base', "RegCache.create: %S -> %S", id, id2)
+        id = id2
+    end
+
+    regClass = regClass or find_regClass(registry, id)
+    if not regClass then return nil end
+
+    -- enabled by ZBExhume41 mod
+    if regClass.registerBase and registerBaseArgs ~= false then
+        local result = regClass.registerBase(id, unpack(registerBaseArgs))
+        if result then
+            ZModUnbork.clog('registerBase', "%s.registerBase(%s, %s) => %s", class2str(regClass), id, registerBaseArgs, result)
+            return result
+        end
+    end
+
+    -- registerBase is not available, and register() will fail if id has "base:" prefix
+    if id:sub(1,5):lower() == "base:" then
+        local id2 = id:sub(6)
+        ZModUnbork.clog_once('fix_base', "RegCache.create: %S -> %S", id, id2)
+        id = id2
+    end
+
+    local result = regClass.register(ZModUnbork.fix_id(id), unpack(registerArgs))
+    if result then ZModUnbork.clog('register', "%s.register(%s, %s) => %s", class2str(regClass), id, registerArgs, result) end
+
+    return result
+end
+
+-- convert String id to registry id, register if not exists, and cache for future use
 function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, registerBaseArgs)
     if not registry or type(id) ~= "string" then
         logger:error("RegCache.find_or_create: invalid arguments, registry=%S, id=%S", registry, id)
@@ -96,49 +157,9 @@ function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, register
 
     -- repeat lookups on cache misses, resources may be available later after other mods load
     local needle, regClass = ZModUnbork.RegCache.find(registry, id)
-    if not regClass then return nil end
-
-    while not needle do
-        -- find failed, try to register
-        registerArgs = registerArgs or {}
-        if type(registerArgs) ~= "table" then
-            logger:error("RegCache.find_or_create: invalid registerArgs=%S", registerArgs)
-            return nil
-        end
-        if registerBaseArgs == nil then
-            registerBaseArgs = registerArgs
-        elseif registerBaseArgs ~= false and type(registerBaseArgs) ~= "table" then
-            logger:error("RegCache.find_or_create: invalid registerBaseArgs=%S", registerBaseArgs)
-            return nil
-        end
-
-        -- strip mistyped "base." prefix
-        if id:sub(1,5):lower() == "base." then
-            local id2 = id:sub(6)
-            ZModUnbork.clog_once('fix_base', "RegCache.find_or_create: %S -> %S", id, id2)
-            id = id2
-        end
-
-        -- enabled by ZBExhume41 mod
-        if regClass.registerBase and registerBaseArgs ~= false then
-            needle = regClass.registerBase(id, unpack(registerBaseArgs))
-            if needle then
-                ZModUnbork.increment_stat('registerBase')
-                break -- intentional break
-            end
-        end
-
-        -- registerBase is not available, and register() will fail if id has "base:" prefix
-        if id:sub(1,5):lower() == "base:" then
-            local id2 = id:sub(6)
-            ZModUnbork.clog_once('fix_base', "RegCache.find_or_create: %S -> %S", id, id2)
-            id = id2
-        end
-
-        needle = regClass.register(ZModUnbork.fix_id(id), unpack(registerArgs))
-        if needle then ZModUnbork.increment_stat('register') end -- no break here due to next unconditional break
-
-        break
+    if not needle then
+        if not regClass then return nil end
+        needle = ZModUnbork.RegCache.create(registry, id, registerArgs, registerBaseArgs, regClass)
     end
 
     cache[lowKey] = needle -- still may be nil

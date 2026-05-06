@@ -127,14 +127,9 @@ end
 
 local _maxTypeLen = 15
 
-local function checkItem(item)
-    if not item.setItemType then return end
-
+local function fixItemType(item, scriptTbl)
     local curType = item:getItemType()
-    if curType and curType ~= ItemType.NORMAL then return end -- already fixed
-
     local newType = ItemType.NORMAL
-    local scriptTbl = zdk.parse_item_script(item)
     if scriptTbl and scriptTbl.type then
         newType = ItemType.get(ResourceLocation.of(scriptTbl.type))
         if not newType then
@@ -152,6 +147,20 @@ local function checkItem(item)
         ZModUnbork.clog("ItemType", "set itemType to %-*s for %s", _maxTypeLen, newType, item:getFullName())
     end
     item:setItemType(newType)
+    return true
+end
+
+local function checkItem(item)
+    if not item.setItemType then return end
+
+    local scriptTbl = zdk.parse_item_script(item)
+    if not scriptTbl then logger:error("no script data for %S", item); return end
+
+    local changed = false
+    local curType = item:getItemType()
+    if not curType or curType == ItemType.NORMAL then
+        changed = fixItemType(item, scriptTbl)
+    end
 
     -- weapons   are ItemType.WEAPON
     -- magazines are ItemType.NORMAL
@@ -161,29 +170,41 @@ local function checkItem(item)
         if ammoType then
             _maxTypeLen = math.max(_maxTypeLen, string.len(tostring(ammoType)))
             item:setAmmoType(ammoType)
+            changed = true
             ZModUnbork.clog('AmmoType', "set ammoType to %-*s for %s", _maxTypeLen, ammoType, item:getFullName())
         else
             logger:warn("invalid ammoType %S for %s", scriptTbl.ammotype, item:getFullName())
         end
     end
+
+    if item:getItemType() == ItemType.LITERATURE then
+        -- 41.78: TeachedRecipes
+        -- 42.12: LearnedRecipes
+        if scriptTbl.teachedrecipes then
+            ZModUnbork.clog('LearnedRecipes', "set LearnedRecipes to %S for %s", scriptTbl.teachedrecipes, item:getFullName())
+            item:DoParam("LearnedRecipes", scriptTbl.teachedrecipes)
+            changed = true
+        end
+    end
+
+    return changed
 end
 
 local function patchItemTypes()
     local items = ScriptManager.instance:getAllItems()
+    local changed_items = {}
     for i=0,items:size()-1 do
         local item = items:get(i)
         if item:getModID() ~= ScriptManager.VanillaID then
-            checkItem(item)
-            if item:getItemType() == ItemType.LITERATURE then
-                local scriptTbl = zdk.parse_item_script(item)
-                -- 41.78: TeachedRecipes
-                -- 42.12: LearnedRecipes
-                if scriptTbl and scriptTbl.teachedrecipes then
-                    ZModUnbork.clog('LearnedRecipes', "set LearnedRecipes to %S for %s", scriptTbl.teachedrecipes, item:getFullName())
-                    item:DoParam("LearnedRecipes", scriptTbl.teachedrecipes)
-                end
+            if checkItem(item) then
+                table.insert(changed_items, item)
             end
         end
+    end
+
+    -- call resolveItemTypes() for all changed items AFTER the change loop
+    for _, item in ipairs(changed_items) do
+        item:resolveItemTypes() -- fixes IsoBulletTracerEffects errors due to ammoType changes, does other stuff
     end
 end
 

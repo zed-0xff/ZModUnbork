@@ -32,10 +32,10 @@ zdk.hook({
                         logger:error("BodyLocationGroup.list.add(%d, %s) called with unexpected argument type %s", index, locationObj, type(locationObj))
                         return
                     end
-                    ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.add(%d, %s) => group:moveLocationToIndex(%s, %d)", index, locationObj, id, index)
+                    ZModUnbork.clog('BodyLocation', "BodyLocationGroup.list.add(%d, %s) => group:moveLocationToIndex(%s, %d)", index, locationObj, id, index)
                     ZModUnbork.last_group:moveLocationToIndex(id, index) -- expects ItemBodyLocation, int
                 else
-                    ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.add(%d, %s) called on unmodifiable list, ignored", index, locationObj)
+                    ZModUnbork.clog('BodyLocation', "BodyLocationGroup.list.add(%d, %s) called on unmodifiable list, ignored", index, locationObj)
                 end
             elseif not locationObj then
                 -- add(obj)
@@ -49,7 +49,7 @@ zdk.hook({
                     logger:error("BodyLocationGroup.list.add(%s) called with unexpected argument type %s", locationObj, type(locationObj))
                     return
                 end
-                ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.add(%s) => group:getOrCreateLocation(%s)", locationObj, id)
+                ZModUnbork.clog('BodyLocation', "BodyLocationGroup.list.add(%s) => group:getOrCreateLocation(%s)", locationObj, id)
                 ZModUnbork.last_group:getOrCreateLocation(id) -- expects ItemBodyLocation
             else
                 -- ??
@@ -59,7 +59,7 @@ zdk.hook({
 
         remove = function(orig, self, locationObj, ...)
             _lastRemove = locationObj
-            ZModUnbork.clog('BodyLocations', "BodyLocationGroup.list.remove(%s) called on unmodifiable list, ignored", locationObj)
+            ZModUnbork.clog('BodyLocation', "BodyLocationGroup.list.remove(%s) called on unmodifiable list, ignored", locationObj)
         end,
     },
 })

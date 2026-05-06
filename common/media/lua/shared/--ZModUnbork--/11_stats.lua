@@ -2,12 +2,17 @@ ZModUnbork.stats = ZModUnbork.stats or {}
 
 local logger = ZModUnbork.logger
 
+function ZModUnbork.increment_stat(key)
+    key = key and tostring(key) or "?"
+    ZModUnbork.stats[key] = (ZModUnbork.stats[key] or 0) + 1
+end
+
 --- count or log
 function ZModUnbork.clog(key, fmt, ...)
     if ZModUnbork.Config.get('verbose_logs') then
         logger:info(fmt, ...)
     else
-        ZModUnbork.stats[key] = (ZModUnbork.stats[key] or 0) + 1
+        ZModUnbork.increment_stat(key)
     end
 end
 
@@ -15,7 +20,7 @@ function ZModUnbork.clog_once(key, fmt, ...)
     if ZModUnbork.Config.get('verbose_logs') then
         ZModUnbork.log_once(fmt, ...)
     else
-        ZModUnbork.stats[key] = (ZModUnbork.stats[key] or 0) + 1
+        ZModUnbork.increment_stat(key)
     end
 end
 

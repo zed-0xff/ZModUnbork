@@ -11,7 +11,7 @@ local logger = ZModUnbork.logger
 local _locations_cache = ZModUnbork.RegCache.get_cache(Registries.ITEM_BODY_LOCATION)
 
 local function convert_id(id, fmt, ...)
-    if fmt then ZModUnbork.clog_once('BodyLocations', fmt, ...) end
+    if fmt then ZModUnbork.clog_once('BodyLocation', fmt, ...) end
     return ZModUnbork.RegCache.find_or_create(Registries.ITEM_BODY_LOCATION, id)
 end
 
@@ -105,7 +105,7 @@ local function checkItem(item, phase)
 
     local newLoc = _locations_cache[scriptTbl.bodylocation:lower()]
     if newLoc then
-        ZModUnbork.clog('BodyLocations', "set %-13s to %-35s for %s", "bodyLocation", newLoc, item:getFullName())
+        ZModUnbork.clog('BodyLocation', "set %-13s to %-35s for %s", "bodyLocation", newLoc, item:getFullName())
         item:setBodyLocation(newLoc)
     elseif phase == 2 then
         logger:warn("phase%s: unknown bodyLocation %-20s for %s", phase, scriptTbl.bodylocation, item:getFullName())

@@ -123,7 +123,7 @@ function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, register
         if regClass.registerBase and registerBaseArgs ~= false then
             needle = regClass.registerBase(id, unpack(registerBaseArgs))
             if needle then
-                ZModUnbork.stats.registerBase = (ZModUnbork.stats.registerBase or 0) + 1
+                ZModUnbork.increment_stat('registerBase')
                 break -- intentional break
             end
         end
@@ -136,7 +136,7 @@ function ZModUnbork.RegCache.find_or_create(registry, id, registerArgs, register
         end
 
         needle = regClass.register(ZModUnbork.fix_id(id), unpack(registerArgs))
-        if needle then ZModUnbork.stats.register = (ZModUnbork.stats.register or 0) + 1 end -- no break here due to next unconditional break
+        if needle then ZModUnbork.increment_stat('register') end -- no break here due to next unconditional break
 
         break
     end

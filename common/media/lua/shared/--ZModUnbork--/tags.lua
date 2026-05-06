@@ -5,14 +5,15 @@
 -- zombie/inventory/InventoryItem.java
 -- zombie/scripting/objects/Item.java
 --
--- 42.12    public ArrayList<String> getTags() - has get(index) method
--- 42.13.1  public Set<ItemTag>      getTags() - does not have get(index) method
+-- 42.12: public ArrayList<String> getTags() - has get(index) method
+-- 42.13: public Set<ItemTag>      getTags() - does not have get(index) method
 --
 -- patches metatable for Set<ItemTag>, so both InventoryItem.getTags and Item.getTags are affected
 zdk.augment_metatable(HashSet.class, {
     get = function(self, index)
         local obj = self:toArray()[index+1] -- can be NULL if obj is not registered: [base:firearm, null, base:hasmetal]
         if instanceof(obj, "ItemTag") then
+            ZModUnbork.clog_once('getTags:get', 'getTags:get')
             return obj and obj:toString() or ""
         else
             -- 42.17: getCell():getVehicles() returns a Set<BaseVehicle> which also lands here

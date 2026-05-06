@@ -42,7 +42,7 @@ local function checkItem(item)
 
     if zdk.parse_item_script(item)["canbeequipped"] then return end -- already fixed, skip
 
-    ZModUnbork.clog('BodyLocations', "set %-13s to %-35s for %s", "canBeEquipped", bodyLoc, item:getFullName())
+    ZModUnbork.clog('BodyLocation', "set %-13s to %-35s for %s", "canBeEquipped", bodyLoc, item:getFullName())
     item:DoParam("canBeEquipped", tostring(bodyLoc))
 end
 

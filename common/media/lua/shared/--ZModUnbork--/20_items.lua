@@ -115,7 +115,10 @@ local function checkItem(item)
     end
     item:setItemType(newType)
 
-    if newType == ItemType.WEAPON and scriptTbl.ammotype and item.getAmmoType and not item:getAmmoType() then
+    -- weapons   are ItemType.WEAPON
+    -- magazines are ItemType.NORMAL
+    -- both of them have ammoType
+    if scriptTbl.ammotype and item.getAmmoType and not item:getAmmoType() then
         local ammoType = findAmmoType(scriptTbl.ammotype)
         if ammoType then
             _maxTypeLen = math.max(_maxTypeLen, string.len(tostring(ammoType)))

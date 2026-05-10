@@ -76,19 +76,32 @@ zdk.patch_all_metatables('hasTag', {
 -- 42.12: public boolean IsoGameCharacter.hasEquippedTag(String str)
 -- 42.13: public boolean IsoGameCharacter.hasEquippedTag(ItemTag itemTag)
 zdk.patch_all_metatables('hasEquippedTag', {
-    hasEquippedTag = function(orig, self, tagName, ...)
-        if type(tagName) == "string" then
-            ZModUnbork.clog_once('hasEquippedTag', "hasEquippedTag(%S)", tagName)
+    hasEquippedTag = function(orig, self, tag, ...)
+        if type(tag) == "string" then
+            ZModUnbork.clog_once('hasEquippedTag', "hasEquippedTag(%S)", tag)
             local hands = { 'getPrimaryHandItem', 'getSecondaryHandItem' }
             for _, hand in ipairs(hands) do
                 local item = self[hand] and self[hand](self)
-                if item and item:hasTag(tagName) then
+                if item and item:hasTag(tag) then
                     return true
                 end
             end
             return false
         end
 
-        return orig(self, tagName, ...)
+        return orig(self, tag, ...)
     end
 })
+
+-- 42.12: public ArrayList<Item> ScriptManager.getItemsTag(String str)
+-- 42.13: public ArrayList<Item> ScriptManager.getItemsTag(ItemTag itemTag)
+--zdk.hook({
+--    ScriptManager = {
+--        getItemsTag = function(orig, self, tag, ...)
+--            if type(tag) == "string" then
+--                ZModUnbork.clog_once('getItemsTag', "getItemsTag(%S)", tag) 
+--            end
+--            return orig(self, tag, ...)
+--        end
+--    }
+--})

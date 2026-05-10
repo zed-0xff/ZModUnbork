@@ -1,6 +1,7 @@
 -- mods unborked:
 --   DynamicTraits.2459400130
 --   JeevesPC.3693550188
+--   LeGourmetRevolution.2719327441 (B41)
 --   Rocky_SanityB42.3390307636
 
 -- TraitFactory was removed in 42.13
@@ -42,6 +43,8 @@ TraitFactory = {
         ZModUnbork.clog_once('traits', "TraitFactory.getTraits()")
         return CharacterTraitDefinition.getTraits()
     end,
+
+    sortList = function() end,
 }
 
 -- 42.12: class CharacterTrait

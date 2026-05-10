@@ -1,6 +1,7 @@
 -- mods unborked:
---   DynamicTraits.2459400130
 --   CombatMasteringSkill.3435985650
+--   DynamicTraits.2459400130
+--   LeGourmetRevolution.2719327441 (B41)
 
 -- ProfessionFactory was removed in 42.13
 if ProfessionFactory then return end
@@ -23,6 +24,16 @@ ProfessionFactory = {
             CharacterProfessionDefinition.addCharacterProfessionDefinition(profType, name, cost, description, iconPathName)
         )
         return result -- CharacterProfessionDefinition
+    end,
+
+    getProfession = function(id)
+        ZModUnbork.clog_once('professions', "ProfessionFactory.getProfession(%s)", id)
+        local profType = ZModUnbork.RegCache.find( Registries.CHARACTER_PROFESSION, id )
+        if not profType then
+            ZModUnbork.warn_once("ProfessionFactory.getProfession(%S) => nil", id)
+            return nil
+        end
+        return CharacterProfessionDefinition.getCharacterProfessionDefinition(profType)
     end,
 
     -- 42.12 ProfessionFactory.getProfessions()
@@ -58,9 +69,9 @@ ZModUnbork.patch_method_alias(CharacterProfessionDefinition.class, "getFreeRecip
 -- 42.13: HashMap<PerkFactory.Perk, Integer> CharacterProfessionDefinition.getXpBoosts()
 ZModUnbork.patch_method_alias(CharacterProfessionDefinition.class, "getXPBoostMap", "getXpBoosts")
 
+-- 42.12: public string              SurvivorDesc.getProfession()
+-- 42.13: public CharacterProfession SurvivorDesc.getCharacterProfession()
 zdk.augment_metatable( SurvivorDesc.class, {
-    -- 42.12: public string getProfession()
-    -- 42.13: public CharacterProfession getCharacterProfession()
     getProfession = function(self)
         ZModUnbork.clog_once('professions', "SurvivorDesc.getProfession()")
         return self:getCharacterProfession():getName()

@@ -4,7 +4,6 @@
 
 -- XXX this file has to be in server/, not common/
 
-require "Items/ProceduralDistributions"
 if not ProceduralDistributions or not ProceduralDistributions.list then return end
 
 -- vanilla ProceduralDistributions.lua defines following aliases, but they are effectively ignored due to the way lua parses table definitions

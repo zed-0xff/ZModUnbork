@@ -1,5 +1,7 @@
 -- mods unborked:
---   ArsenalGunFighter.2297098490 (B41)
+--   ArsenalGunFighter.2297098490   (B41)
+--   LeGourmetRevolution.2719327441 (B41)
+--   SnakeUtilsPack.2719327441      (B41)
 
 InventoryItemFactory = InventoryItemFactory or {}
 if not InventoryItemFactory.CreateItem then
@@ -64,8 +66,16 @@ local function patchReloadWeaponAction_afterAll()
     end
 end
 
-local function patchReloadWeaponAction_beforeAll()
+local function patch_42_12_beforeAll()
     Events.OnGameBoot.Add(patchReloadWeaponAction_afterAll)
 end
+Events.OnGameBoot.Add(patch_42_12_beforeAll)
 
-Events.OnGameBoot.Add(patchReloadWeaponAction_beforeAll)
+if forageSystem then
+    forageCategories  = forageCategories  or forageSystem.categoryDefinitions
+    forageDefs        = forageDefs        or forageSystem.forageDefinitions
+    forageDefaultDefs = forageDefaultDefs or forageSystem.defaultDefinitions
+    forageSkills      = forageSkills      or forageSystem.forageSkillDefinitions
+end
+
+ISSeedAction = ISSeedAction or ISSeedActionNew

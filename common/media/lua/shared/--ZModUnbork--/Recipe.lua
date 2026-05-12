@@ -3,8 +3,15 @@
 --   RebalancedYieldsButchering.3564838872
 --   Support Corps.3512993822
 
-if type(Recipe) ~= "table" then return end
+if Recipe then
+    if type(Recipe) ~= "table" then return end
+else
+    Recipe = {}
+end
 
-if not Recipe.OnCreate then Recipe.OnCreate = {} end
-if not Recipe.OnTest   then Recipe.OnTest   = {} end
-if not Recipe.OnGiveXP then Recipe.OnGiveXP = {} end
+local keys = {"GetItemTypes", "OnCreate", "OnTest", "OnGiveXP"}
+for _, key in ipairs(keys) do
+    if not Recipe[key] then
+        Recipe[key] = {}
+    end
+end

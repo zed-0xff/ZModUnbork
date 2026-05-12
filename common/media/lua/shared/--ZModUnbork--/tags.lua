@@ -22,41 +22,13 @@ zdk.augment_metatable(HashSet.class, {
     end
 })
 
-local _cached_tags = {}
-
-local function parse_tags(item)
-    local scriptTbl = zdk.parse_item_script(item)
-    local tags = {}
-
-    if scriptTbl and scriptTbl.tags then
-        local tagList = scriptTbl.tags:lower():split(";")
-        for _, tag in ipairs(tagList) do
-            tags[tag] = true
-        end
-    end
-
-    return tags
-end
-
 local function patchedHasTag(orig, self, ...)
     local nArgs = select("#", ...)
     local tagName = select(1, ...)
     if nArgs == 1 and type(tagName) == "string" then
-        local fullType = (self.getFullType and self:getFullType()) or (self.getFullName and self:getFullName())
-        if not fullType then
-            ZModUnbork.warn_once("could not determine full type for %s", self)
-            return false
-        end
-
-        local cachedTags = _cached_tags[fullType]
-        if not cachedTags then
-            cachedTags = parse_tags(self)
-            _cached_tags[fullType] = cachedTags
-        end
-
-        local result = cachedTags[tagName:lower()] or false
-        ZModUnbork.clog_once('hasTag', "%s:hasTag(%S) => %s", fullType, tagName, result)
-        return result
+        local tag = ZModUnbork.RegCache.find( Registries.ITEM_TAG, tag )
+        ZModUnbork.clog_once('hasTag', "%s:hasTag(%S) => %s", self, tagName, tag)
+        return tag and orig(self, tag)
     end
 
     return orig(self, ...)
@@ -77,6 +49,10 @@ zdk.patch_all_metatables('hasTag', {
 -- 42.13: public boolean IsoGameCharacter.hasEquippedTag(ItemTag itemTag)
 zdk.patch_all_metatables('hasEquippedTag', {
     hasEquippedTag = function(orig, self, tag, ...)
+        if not tag then
+            ZModUnbork.warn_once("hasEquippedTag called with nil tag")
+            return false
+        end
         if type(tag) == "string" then
             ZModUnbork.clog_once('hasEquippedTag', "hasEquippedTag(%S)", tag)
             local hands = { 'getPrimaryHandItem', 'getSecondaryHandItem' }
@@ -95,13 +71,19 @@ zdk.patch_all_metatables('hasEquippedTag', {
 
 -- 42.12: public ArrayList<Item> ScriptManager.getItemsTag(String str)
 -- 42.13: public ArrayList<Item> ScriptManager.getItemsTag(ItemTag itemTag)
---zdk.hook({
---    ScriptManager = {
---        getItemsTag = function(orig, self, tag, ...)
---            if type(tag) == "string" then
---                ZModUnbork.clog_once('getItemsTag', "getItemsTag(%S)", tag) 
---            end
---            return orig(self, tag, ...)
---        end
---    }
---})
+zdk.hook({
+    [ScriptManager.class] = {
+        getItemsTag = function(orig, self, tag, ...)
+            if not tag then
+                ZModUnbork.warn_once("getItemsTag called with nil tag")
+                return false
+            end
+            if type(tag) == "string" then
+                ZModUnbork.clog_once('getItemsTag', "getItemsTag(%S)", tag) 
+                tag = ZModUnbork.RegCache.find( Registries.ITEM_TAG, tag )
+                if not tag then return false end
+            end
+            return orig(self, tag, ...)
+        end
+    }
+})

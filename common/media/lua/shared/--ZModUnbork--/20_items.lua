@@ -150,6 +150,28 @@ local function fixItemType(item, scriptTbl)
     return true
 end
 
+local function parse_tags(scriptTbl)
+    if not scriptTbl or not scriptTbl.tags then return {} end
+
+    local tags = {}
+    for _, tag in ipairs(scriptTbl.tags:split(";")) do
+        tag = tag:trim()
+        if tag ~= "" then table.insert(tags, tag) end
+    end
+    return tags
+end
+
+local function fixItemTags(item, scriptTags)
+    local curTags = item:getTags()
+    curTags:remove(nil) -- remove non-parsed tags
+    for _, tagName in ipairs(scriptTags) do
+        local tag = ZModUnbork.RegCache.find_or_create( Registries.ITEM_TAG, tagName )
+        if tag and curTags:add(tag) then
+            ZModUnbork.clog('fixItemTags', "add tag %s to %s", tag, item:getFullName())
+        end
+    end
+end
+
 local function checkItem(item)
     if not item.setItemType then return end
 
@@ -185,6 +207,13 @@ local function checkItem(item)
             item:DoParam("LearnedRecipes", scriptTbl.teachedrecipes)
             changed = true
         end
+    end
+
+    -- fix tags
+    local tags = parse_tags(scriptTbl) or {}
+    if #tags > 0 and #tags > item:getTags():size() or item:getTags():contains(nil) then
+        fixItemTags(item, tags)
+        changed = true
     end
 
     return changed

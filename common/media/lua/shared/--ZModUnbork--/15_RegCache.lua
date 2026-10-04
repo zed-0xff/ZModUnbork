@@ -49,7 +49,7 @@ end
 
 function ZModUnbork.RegCache.find(registry, id)
     if not registry or type(id) ~= "string" then
-        logger:error("RegCache.find: invalid arguments, registry=%S, id=%S", registry, id)
+        ZModUnbork.error_once("RegCache.find: invalid arguments, registry=%S, id=%S", registry, id)
         return nil, nil
     end
 

@@ -1,0 +1,59 @@
+/*
+  mods fixed:
+    - LeGourmetRevolution.2719327441 (B41)
+
+  fix error: Could not find evolved recipe or template: 'HotDrinkRed' in item = Base.HoneyJar
+*/
+
+/*
+module Base
+{
+    evolvedrecipe HotDrinkRed
+    {
+        BaseItem = Base.Mugl,
+        MaxItems = 3,
+        ResultItem = Base.HotDrinkRed,
+        Cookable = true,
+        AddIngredientIfCooked = true,
+        AddIngredientSound = AddItemInBeverage,
+        Name = Prepare Beverage,
+        CanAddSpicesEmpty = true,
+        MinimumWater = 1.0,
+        Template = HotDrink,
+        hidden = true,
+    }
+
+    evolvedrecipe Beverage
+    {
+        BaseItem = Base.GlassTumbler,
+        MaxItems = 3,
+        ResultItem = Base.HotDrinkTumbler,
+        Cookable = true,
+        AddIngredientIfCooked = true,
+        AddIngredientSound = AddItemInBeverage,
+        Name = Prepare Beverage,
+        CanAddSpicesEmpty = true,
+        MinimumWater = 1.0,
+        Template = HotDrink,
+        hidden = true,
+    }
+
+    evolvedrecipe Beverage2
+    {
+        BaseItem = Base.PlasticCup,
+        MaxItems = 3,
+        ResultItem = Base.HotDrink,
+        Cookable = true,
+        AddIngredientIfCooked = true,
+        AddIngredientSound = AddItemInBeverage,
+        Name = Prepare Beverage,
+        CanAddSpicesEmpty = true,
+        MinimumWater = 1.0,
+        Template = HotDrink,
+        hidden = true,
+    }
+
+    evolvedrecipe WineInGlass { hidden = true }
+    evolvedrecipe Beer        { hidden = true }
+    evolvedrecipe Beer2       { hidden = true }
+}*/

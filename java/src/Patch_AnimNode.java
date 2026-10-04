@@ -1,7 +1,7 @@
 package me.zed_0xff.z_mod_unbork;
 
 import me.zed_0xff.zombie_buddy.Logger;
-import me.zed_0xff.zombie_buddy.Patch;
+import me.zed_0xff.zombie_buddy.annotations.Patch;
 
 import zombie.core.skinnedmodel.advancedanimation.AnimNode;
 

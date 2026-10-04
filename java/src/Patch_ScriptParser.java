@@ -4,14 +4,14 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 import me.zed_0xff.zombie_buddy.Logger;
-import me.zed_0xff.zombie_buddy.Patch;
+import me.zed_0xff.zombie_buddy.annotations.Patch;
 
 // mods unborked:
 //   ArsenalGunFighter.2297098490 (B41)
 
 @Patch(className = "zombie.scripting.ScriptParser", methodName = "stripComments")
 public class Patch_ScriptParser {
-    public static final Pattern PATTERN = Pattern.compile("(\\s*item\\s+[^\\s]+)\\s+--\\s.*");
+    static final Pattern PATTERN = Pattern.compile("(\\s*item\\s+[^\\s]+)\\s+--\\s.*");
 
     @Patch.OnExit
     public static void exit(String totalFile, @Patch.Return(readOnly = false) String result) {

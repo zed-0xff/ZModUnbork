@@ -41,6 +41,7 @@ end
 
 function ZModUnbork.log_once (fmt, ...) log(logger.INFO, fmt, ...) end
 function ZModUnbork.warn_once(fmt, ...) log(logger.WARN, fmt, ...) end
+function ZModUnbork.error_once(fmt, ...) log(logger.ERROR, fmt, ...) end
 
 -- CamelCase -> under_score
 -- "Base:Bullets9mm" -> "base:bullets_9mm"

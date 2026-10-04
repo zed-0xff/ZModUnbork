@@ -29,7 +29,20 @@ local MAP = {
     Thirst      = CharacterStat.THIRST,
 }
 
-local tbl = {
+local tbl = {}
+for k, v in pairs(MAP) do
+    tbl["get" .. k] = function(self)
+        return self:get(v)
+    end
+
+    tbl["set" .. k] = function(self, f)
+        return self:set(v, f)
+    end
+end
+zdk.augment_metatable( Stats.class, tbl )
+
+-- a separate batch because it uses getPanic defined above
+tbl = {
     getEndurancelast        = "getLastEndurance",
     setEndurancelast        = "setLastEndurance",
 
@@ -45,15 +58,4 @@ local tbl = {
     getFear                 = "getPanic", -- XXX not sure
     setFear                 = "setPanic", -- XXX not sure
 }
-
-for k, v in pairs(MAP) do
-    tbl["get" .. k] = function(self)
-        return self:get(v)
-    end
-
-    tbl["set" .. k] = function(self, f)
-        return self:set(v, f)
-    end
-end
-
 zdk.augment_metatable( Stats.class, tbl )

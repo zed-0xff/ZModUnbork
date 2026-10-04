@@ -1,5 +1,6 @@
 ZModUnbork = ZModUnbork or {}
 
+local logger  = ZModUnbork.logger
 local _cache  = nil
 local _nfiles = 0
 local _nlines = 0
@@ -79,7 +80,7 @@ local function init_cache()
         process_file(mod_id, "media/lua/shared/Translate/EN/UI_EN.txt")
     end
 
-    ZModUnbork.logger:debug("Loaded %d translations from %d files", _nlines, _nfiles)
+    logger:debug("Loaded %d translations from %d files", _nlines, _nfiles)
     ZModUnbork.stats = ZModUnbork.stats or {}
     ZModUnbork.stats.translation_lines = _nlines
     ZModUnbork.stats.translation_files = _nfiles
@@ -107,16 +108,43 @@ local function try_translate_item(result, fullType)
 end
 
 -- Item, what else?
+-- capture_warnings = true to silent these:
+--   hookTable(): class zombie.scripting.objects.VehicleScript.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.characters.IsoZombie.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.characters.IsoSurvivor.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.scripting.entity.GameEntityScript.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.characters.IsoGameCharacter.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.characters.IsoDummyCameraCharacter.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.iso.IsoLuaMover.getDisplayName is not callable, type=nil
 zdk.patch_all_metatables('getFullName', {
-    getDisplayName = function(orig, self, ...) return try_translate_item(orig(self, ...), self:getFullName()) end
-})
+    getDisplayName      = function(orig, self, ...) return try_translate_item(orig(self, ...), self:getFullName()) end
+}, { capture_warnings = true })
+
 
 -- InventoryItem, Clothing, HandWeapon, ...
-zdk.patch_all_metatables('getFullType', {
+local results = zdk.patch_all_metatables('getFullType', {
     getDisplayName      = function(orig, self, ...) return try_translate_item(orig(self, ...), self:getFullType()) end,
     getName             = function(orig, self, ...) return try_translate_item(orig(self, ...), self:getFullType()) end,
     getCustomMenuOption = function(orig, ...)       return try_translate(orig(...)) end,
-})
+}, { capture_warnings = true })
+
+-- show warnings only if no successfull hooks for the class, prevents a bunch of warnings like:
+--   hookTable(): class zombie.scripting.objects.ItemRecipe.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.scripting.objects.ItemRecipe.getCustomMenuOption is not callable, type=nil
+--   hookTable(): class zombie.scripting.objects.TimedActionScript.getDisplayName is not callable, type=nil
+--   hookTable(): class zombie.scripting.objects.TimedActionScript.getCustomMenuOption is not callable, type=nil
+if results then
+    for klass, res in pairs(results) do
+        if res[1] == 0 and res.warnings then
+            logger:warn("no hooks applied for %s:", klass)
+            for _, msg in pairs(res.warnings) do
+                logger:warn("    %s", msg)
+            end
+        end
+    end
+else
+    logger:warn("zdk.patch_all_metatables() returned no results")
+end
 
 --- tooltips
 

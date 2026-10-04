@@ -5,6 +5,7 @@ modversion=1.1
 
 author=Zed
 url=https://github.com/zed-0xff/ZModUnbork
+patreon=https://patreon.com/zed_0xff
 
 icon=icon_256.png
 poster=icon_256.png
@@ -15,6 +16,11 @@ require=\zdk
 loadModBefore=\Bandits2,\FurryApocalypse,\FurryMod,\SUPPORTGOODS,\SUPPORTGOODS2,\SUPPORTGOODSCOMPUTERS,\DynamicTraits,\RC_RealisticColdMod,\CombatMasteringSkill,\Brita,\Brita_2,\P4ThiefExpansion
 loadfirst=true
 
-ZBVersionMin=2.2.0
-javaJarFile=media/java/shared/ZModUnbork.jar
 javaPkgName=me.zed_0xff.z_mod_unbork
+
+javaJarFile=media/java/shared/ZModUnbork-2x.jar
+ZBVersionMin=2.0.0
+ZBVersionMax=2.99.99
+
+javaJarFile1=media/java/shared/ZModUnbork.jar
+ZBVersionMin=3.0.0

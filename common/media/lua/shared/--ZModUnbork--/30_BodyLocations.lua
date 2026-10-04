@@ -2,6 +2,7 @@
 --   ArsenalGunFighter.2297098490 (B41)
 --   FortniteFurryGirls
 --   FurryMod.2893930681
+--   Kink It Up Extra by GanydeBielovzki.3235632664
 --   newcontainers_B42.3535295548
 --   SoftAndGentleHoodie.3371049128
 
@@ -18,6 +19,15 @@ end
 zdk.hook({
     -- zombie/characters/WornItems/BodyLocationGroup.java
     [BodyLocationGroup.class] = {
+        --   42.12
+        --     public BodyLocation getLocation(String)
+        --   42.13
+        --     public BodyLocation getLocation(ItemBodyLocation)
+        getLocation = function(orig, self, id, ...)
+            if type(id) == "string" then id = convert_id(id, "BodyLocationGroup.getLocation('%s')", id) end
+            return orig(self, id, ...)
+        end,
+
         --   41.78
         --     public BodyLocation getOrCreateLocation(String id)
         --
